@@ -44,7 +44,7 @@ npm run build
 
 ## 🌐 Live Demo
 
-[https://ssumir.github.io/calculator/](https://ssumir.github.io/calculator/)
+[https://sktechchrm.github.io/calculator/](https://sktechchrm.github.io/calculator/)
 
 ---
 
