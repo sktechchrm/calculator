@@ -1,46 +1,33 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdk 35
-    namespace "com.ssumir.calculator"
-
+    namespace = "com.sktechchrm.calculator"
+    compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.ssumir.calculator"
-        minSdk 24
-        targetSdk 35
-        versionCode 1
-        versionName "1.0.0"
-    }
-
-    signingConfigs {
-        release {
-            def localProps = new Properties()
-            def localPropsFile = rootProject.file("local.properties")
-            if (localPropsFile.exists()) {
-                localPropsFile.withInputStream { localProps.load(it) }
-            }
-            storeFile file(localProps.getProperty('KEY_STORE_FILE', 'android.keystore'))
-            storePassword localProps.getProperty('KEY_STORE_PASSWORD', '')
-            keyAlias localProps.getProperty('KEY_ALIAS', 'android')
-            keyPassword localProps.getProperty('KEY_PASSWORD', '')
+        applicationId "com.mariocalculator.myapp"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 3
+        versionName "1.0.2"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        aaptOptions {
+            ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
-
     buildTypes {
         release {
-            minifyEnabled true
-            shrinkResources false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
-        }
-        debug {
             minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 }
 
 repositories {
-    flatDir {
+    flatDir{
         dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'
     }
 }
@@ -65,5 +52,5 @@ try {
         apply plugin: 'com.google.gms.google-services'
     }
 } catch(Exception e) {
-    logger.info("google-services.json not found, google-services plugin not applied. Push Notifications won't work")
+    logger.info("google-services.json not found, google-services plugin not applied.")
 }
