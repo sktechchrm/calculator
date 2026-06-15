@@ -2,9 +2,9 @@
   "relation": ["delegate_permission/common.handle_all_urls"],
   "target": {
     "namespace": "android_app",
-    "package_name": "com.mariocalculator.myapp",
+    "package_name": "com.sktechchrm.calculator",
     "sha256_cert_fingerprints": [
-      "DB:DC:7F:AF:8A:82:FB:0B:DB:B9:81:EF:8D:E2:99:55:FB:D7:E3:FE:31:12:9B:0A:94:F7:C0:FF:79:CB:9F:25"
+      "13:9C:0E:C6:0C:76:0E:E2:63:5E:D8:30:8E:E9:DC:96:6C:2C:57:49:CB:B9:5D:7E:44:25:75:F2:AB:7A:6E:EB"
     ]
   }
 }]

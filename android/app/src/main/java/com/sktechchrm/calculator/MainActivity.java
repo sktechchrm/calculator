@@ -1,4 +1,4 @@
-package com.ssumir.calculator;
+package com.sktechchrm.calculator;
 
 import com.getcapacitor.BridgeActivity;
 

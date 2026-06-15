@@ -1,5 +1,5 @@
 {
-	"appId": "com.mariocalculator.myapp",
+	"appId": "com.sktechchrm.calculator",
 	"appName": "Mario Calculator",
 	"webDir": "dist",
 	"server": {

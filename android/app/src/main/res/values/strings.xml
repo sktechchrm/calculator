@@ -2,6 +2,6 @@
 <resources>
     <string name="app_name">Mario Calculator</string>
     <string name="title_activity_main">Mario Calculator</string>
-    <string name="package_name">com.ssumir.calculator</string>
-    <string name="custom_url_scheme">com.ssumir.calculator</string>
+    <string name="package_name">com.sktechchrm.calculator</string>
+    <string name="custom_url_scheme">com.sktechchrm.calculator</string>
 </resources>

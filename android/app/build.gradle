@@ -4,7 +4,7 @@ android {
     namespace = "com.sktechchrm.calculator"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.mariocalculator.myapp"
+        applicationId "com.sktechchrm.calculator"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 3

@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.mariocalculator.myapp',
+  appId: 'com.sktechchrm.calculator',
   appName: 'Mario Calculator',
   webDir: 'dist',
   server: {
