@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Mario Calculator</string>
-    <string name="title_activity_main">Mario Calculator</string>
+    <string name="app_name">Mario Smart Calculator</string>
+    <string name="title_activity_main">Mario Smart Calculator</string>
     <string name="package_name">com.sktechchrm.calculator</string>
     <string name="custom_url_scheme">com.sktechchrm.calculator</string>
 </resources>

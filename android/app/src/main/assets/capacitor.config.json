@@ -1,6 +1,6 @@
 {
 	"appId": "com.sktechchrm.calculator",
-	"appName": "Mario Calculator",
+	"appName": "Mario Smart Calculator",
 	"webDir": "dist",
 	"server": {
 		"androidScheme": "https"

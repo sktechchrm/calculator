@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/calculator/',
+  base: './',
   publicDir: 'public',
   build: {
     target: 'es2015',

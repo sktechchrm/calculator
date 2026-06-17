@@ -2,7 +2,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.sktechchrm.calculator',
-  appName: 'Mario Calculator',
+  appName: 'Mario Smart Calculator',
   webDir: 'dist',
   server: {
     androidScheme: 'https',

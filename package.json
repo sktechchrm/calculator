@@ -1,6 +1,6 @@
 {
   "name": "mario-calculator",
-  "homepage": "https://ssumir.github.io/calculator",
+  "homepage": "https://sktechchrm.github.io/calculator",
   "private": true,
   "version": "1.0.1",
   "type": "module",
@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist --dotfiles"
   },
   "dependencies": {
     "@capacitor/android": "^8.3.4",
