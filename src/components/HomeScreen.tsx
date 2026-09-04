@@ -81,7 +81,7 @@ const ICON_MAP: Record<string, React.ComponentType<{ size?: number; color?: stri
 
 function numCols(w: number): number {
   if (w >= 1024) return 6;
-  if (w >= 768)  return 4;
+  if (w >= 900)  return 4;
   return 3;
 }
 
@@ -278,6 +278,7 @@ export default function HomeScreen({ onOpen, history }: Props) {
                   <div key={r} style={{
                     display: 'flex', gap,
                     flex: 1, minHeight: 0,
+                    alignItems: 'center',
                   }}>
                     {Array.from({ length: appsInRow }, (_, ci) => {
                       const appIdx = startIdx + ci;
@@ -298,6 +299,7 @@ export default function HomeScreen({ onOpen, history }: Props) {
                           style={{
                             '--ac': accent,
                             flex: 1, minWidth: 0,
+                            height: cell,
                             borderRadius: cardR,
                             padding: padCard,
                             animationName: '_floatUp',
