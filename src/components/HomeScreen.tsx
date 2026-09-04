@@ -277,7 +277,7 @@ export default function HomeScreen({ onOpen, history }: Props) {
                 return (
                   <div key={r} style={{
                     display: 'flex', gap,
-                    height: cell, flexShrink: 0,
+                    flex: 1, minHeight: 0,
                   }}>
                     {Array.from({ length: appsInRow }, (_, ci) => {
                       const appIdx = startIdx + ci;
@@ -298,7 +298,6 @@ export default function HomeScreen({ onOpen, history }: Props) {
                           style={{
                             '--ac': accent,
                             flex: 1, minWidth: 0,
-                            height: cell,
                             borderRadius: cardR,
                             padding: padCard,
                             animationName: '_floatUp',
