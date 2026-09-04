@@ -1,11 +1,10 @@
-[
-  {
-    "relation": ["delegate_permission/common.handle_all_urls"],
-    "target": {
-      "namespace": "android_app",
-      "package_name": "com.sktechchrm.calculator",
-      "sha256_cert_fingerprints":
-        ["A8:9E:C8:B1:1D:3A:06:EA:70:E0:84:67:93:75:AC:4E:2C:3B:EC:C9:55:B7:63:49:31:F0:79:42:44:1A:5A:65"]
-    }
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.sktechchrm.calculator",
+    "sha256_cert_fingerprints": [
+      "13:9C:0E:C6:0C:76:0E:E2:63:5E:D8:30:8E:E9:DC:96:6C:2C:57:49:CB:B9:5D:7E:44:25:75:F2:AB:7A:6E:EB"
+    ]
   }
-]
+}]
