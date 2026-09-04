@@ -1,35 +1,45 @@
 {
-  "packageId": "com.ssumir.calculator",
+  "packageId": "com.sktechchrm.calculator",
   "host": "sktechchrm.github.io",
   "name": "Mario Calculator",
   "launcherName": "Mario Calc",
   "display": "standalone",
-  "orientation": "portrait",
-  "themeColor": "#0f0f14",
-  "navigationColor": "#0f0f14",
-  "navigationColorDark": "#07080d",
-  "navigationDividerColor": "#2e2e38",
-  "navigationDividerColorDark": "#1a1a1e",
-  "backgroundColor": "#0f0f14",
-  "enableNotifications": false,
+  "themeColor": "#667EEA",
+  "themeColorDark": "#000000",
+  "navigationColor": "#000000",
+  "navigationColorDark": "#000000",
+  "navigationDividerColor": "#000000",
+  "navigationDividerColorDark": "#000000",
+  "backgroundColor": "#F0F4FF",
+  "enableNotifications": true,
   "startUrl": "/calculator/",
   "iconUrl": "https://sktechchrm.github.io/calculator/icons/icon-512.png",
   "maskableIconUrl": "https://sktechchrm.github.io/calculator/icons/icon-512.png",
-  "monochromeIconUrl": "https://sktechchrm.github.io/calculator/icons/icon-192.png",
-  "appVersion": "1",
-  "appVersionName": "1.0.0",
-  "shortcuts": [],
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "E:\\Android\\calculator-android\\android.keystore",
+    "alias": "android"
+  },
+  "appVersionName": "11",
+  "appVersionCode": 11,
+  "shortcuts": [
+    {
+      "name": "General Calculator",
+      "shortName": "সাধারণ",
+      "url": "https://sktechchrm.github.io/calculator/",
+      "chosenIconUrl": "https://sktechchrm.github.io/calculator/icons/icon-192.png"
+    },
+    {
+      "name": "EMI Calculator",
+      "shortName": "ইএমআই",
+      "url": "https://sktechchrm.github.io/calculator/",
+      "chosenIconUrl": "https://sktechchrm.github.io/calculator/icons/icon-192.png"
+    }
+  ],
   "generatorApp": "bubblewrap-cli",
   "webManifestUrl": "https://sktechchrm.github.io/calculator/manifest.json",
   "fallbackType": "customtabs",
-  "features": {
-    "locationDelegation": {
-      "enabled": false
-    },
-    "playBilling": {
-      "enabled": false
-    }
-  },
+  "features": {},
   "alphaDependencies": {
     "enabled": false
   },
@@ -37,13 +47,17 @@
   "isChromeOSOnly": false,
   "isMetaQuest": false,
   "fullScopeUrl": "https://sktechchrm.github.io/calculator/",
-  "minSdkVersion": 24,
-  "rotationEnabled": false,
-  "signingKey": {
-    "path": "./android.keystore",
-    "alias": "android"
-  },
-  "splashScreenFadeOutDuration": 300,
-  "enableSplashScreenIconPadding": true,
-  "generatedByBubblewrap": true
+  "minSdkVersion": 21,
+  "orientation": "portrait-primary",
+  "fingerprints": [],
+  "additionalTrustedOrigins": [],
+  "retainedBundles": [],
+  "protocolHandlers": [],
+  "fileHandlers": [],
+  "launchHandlerClientMode": "",
+  "displayOverride": [
+    "standalone",
+    "minimal-ui"
+  ],
+  "appVersion": "11"
 }
