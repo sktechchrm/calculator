@@ -81,7 +81,7 @@ const ICON_MAP: Record<string, React.ComponentType<{ size?: number; color?: stri
 
 function numCols(w: number): number {
   if (w >= 1024) return 6;
-  if (w >= 900)  return 4;
+  if (w >= 768)  return 4;
   return 3;
 }
 
