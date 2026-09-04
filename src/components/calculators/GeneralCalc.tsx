@@ -77,7 +77,7 @@ const BASIC_ROWS: NumKey[][] = [
   [{label:'7',type:'num'},{label:'8',type:'num'},{label:'9',type:'num'},{label:'×',type:'op'}],
   [{label:'4',type:'num'},{label:'5',type:'num'},{label:'6',type:'num'},{label:'−',type:'op'}],
   [{label:'1',type:'num'},{label:'2',type:'num'},{label:'3',type:'num'},{label:'+',type:'op'}],
-  [{label:'0',type:'zero'},{label:'.',type:'num'},{label:'⌫',type:'del'},{label:'▶',type:'eq'}],
+  [{label:'0',type:'zero'},{label:'.',type:'num'},{label:'⌫',type:'del'},{label:'=',type:'eq'}],
 ];
 
 // ── Math engine ────────────────────────────────────────────────────────────────

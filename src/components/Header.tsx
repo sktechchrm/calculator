@@ -182,7 +182,7 @@ export default function Header({ onBack, title, accent, icon: Icon, info }: Prop
         onTouchStart={e => (e.currentTarget.style.background = 'var(--surface2)')}
         onTouchEnd={e => { e.currentTarget.style.background = 'var(--surface)'; }}
       >
-        <FaGlobe size={10} />{lang === 'bn' ? 'EN' : 'à¦¬à¦¾à¦‚'}
+        <FaGlobe size={10} />{lang === 'bn' ? 'EN' : 'বাং'}
       </button>
     </div>
   );
