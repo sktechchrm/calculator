@@ -4,8 +4,6 @@ import { useLang } from '../../context/LangContext.tsx';
 import { useTheme } from '../../context/ThemeContext.tsx';
 import { shareWA, buildShare } from '../../utils/share.ts';
 
-// ── Palette (theme-aware via CSS custom properties) ──────────────────────────
-// These are resolved at runtime via getComputedStyle or fallback to dark defaults
 const CALC_BG_DARK  = '#1c1c24';
 const CALC_BG_LIGHT = '#f5f4ff';
 const DISP_BG_DARK  = '#0d0d14';
@@ -14,7 +12,6 @@ const DISP_BG_LIGHT = '#1e1040';
 const BTN_EQ  = '#7c3aed';
 const TEXT_OP = '#f97316';
 
-// Dynamic palette based on data-theme attribute
 function getPalette() {
   const isLight = document.documentElement.getAttribute('data-theme') === 'light';
   return {
@@ -29,10 +26,11 @@ function getPalette() {
     TEXT_SCI:   isLight ? '#6d28d9'      : '#a78bfa',
     TEXT_NUM:   isLight ? '#1e1b2e'      : '#e8e7f0',
     TEXT_DIM:   isLight ? '#5a5a7a'      : '#6b6780',
-    TEXT_ANS:   isLight ? '#1a0050'      : '#f0eeff',
+    TEXT_ANS:   isLight ? '#1a0050'      : '#f0eeff',  // (unused — overridden below)
     DIVIDER:    isLight ? '#d0cce8'      : '#2e2e40',
   };
 }
+
 const TAB_COLORS: Record<string,string> = {
   Algebra:'#7c3aed', Trigonometry:'#16a34a', Calculus:'#64748b', Hyperbolic:'#e11d48',
 };
@@ -77,10 +75,9 @@ const BASIC_ROWS: NumKey[][] = [
   [{label:'7',type:'num'},{label:'8',type:'num'},{label:'9',type:'num'},{label:'×',type:'op'}],
   [{label:'4',type:'num'},{label:'5',type:'num'},{label:'6',type:'num'},{label:'−',type:'op'}],
   [{label:'1',type:'num'},{label:'2',type:'num'},{label:'3',type:'num'},{label:'+',type:'op'}],
-  [{label:'0',type:'zero'},{label:'.',type:'num'},{label:'⌫',type:'del'},{label:'=',type:'eq'}],
+  [{label:'0',type:'zero'},{label:'.',type:'num'},{label:'⌫',type:'del'},{label:'▶',type:'eq'}],
 ];
 
-// ── Math engine ────────────────────────────────────────────────────────────────
 function fact(n:number):number{n=Math.floor(Math.abs(n));if(n>170)return Infinity;if(n<=1)return 1;let r=1;for(let i=2;i<=n;i++)r*=i;return r;}
 function perm(n:number,r:number){return fact(n)/fact(n-r);}
 function comb(n:number,r:number){return fact(n)/(fact(r)*fact(n-r));}
@@ -143,7 +140,15 @@ interface Props{history:string[];onAdd:(id:string,entry:string)=>void;onClear?:(
 export default function GeneralCalc({history,onAdd,onClear}:Props){
   const{t,lang}=useLang();
   const{isDark}=useTheme();
-  const{CALC_BG,DISP_BG,BTN_SCI,BTN_NUM,BTN_DEL,BTN_FN,BORDER_SCI,BORDER_NUM,TEXT_SCI,TEXT_NUM,TEXT_DIM,TEXT_ANS,DIVIDER}=isDark?{CALC_BG:CALC_BG_DARK,DISP_BG:DISP_BG_DARK,BTN_SCI:'#2a2038',BTN_NUM:'#252530',BTN_DEL:'#2a1010',BTN_FN:'#1e1e2a',BORDER_SCI:'#3d2d6a',BORDER_NUM:'#32323e',TEXT_SCI:'#a78bfa',TEXT_NUM:'#e8e7f0',TEXT_DIM:'#6b6780',TEXT_ANS:'#f0eeff',DIVIDER:'#2e2e40'}:{CALC_BG:CALC_BG_LIGHT,DISP_BG:DISP_BG_LIGHT,BTN_SCI:'#ede9ff',BTN_NUM:'#e8e8f0',BTN_DEL:'#fde8e8',BTN_FN:'#ede9ff',BORDER_SCI:'#d8d0ff',BORDER_NUM:'#d8d8e8',TEXT_SCI:'#6d28d9',TEXT_NUM:'#1e1b2e',TEXT_DIM:'#5a5a7a',TEXT_ANS:'#1a0050',DIVIDER:'#d0cce8'}; const bn=lang==='bn';
+
+  // ── KEY FIX: Display is always dark (like a real calculator screen).
+  // TEXT_ANS must always be bright — never dark text on dark background.
+  // Dark mode: near-white lavender. Light mode: pure white (was #1a0050 — invisible!).
+  const{CALC_BG,DISP_BG,BTN_SCI,BTN_NUM,BTN_DEL,BTN_FN,BORDER_SCI,BORDER_NUM,TEXT_SCI,TEXT_NUM,TEXT_DIM,TEXT_ANS,DIVIDER}=isDark
+    ?{CALC_BG:CALC_BG_DARK,DISP_BG:DISP_BG_DARK,BTN_SCI:'#2a2038',BTN_NUM:'#252530',BTN_DEL:'#2a1010',BTN_FN:'#1e1e2a',BORDER_SCI:'#3d2d6a',BORDER_NUM:'#32323e',TEXT_SCI:'#a78bfa',TEXT_NUM:'#e8e7f0',TEXT_DIM:'#6b6780',TEXT_ANS:'#f0eeff',DIVIDER:'#2e2e40'}
+    :{CALC_BG:CALC_BG_LIGHT,DISP_BG:DISP_BG_LIGHT,BTN_SCI:'#ede9ff',BTN_NUM:'#e8e8f0',BTN_DEL:'#fde8e8',BTN_FN:'#ede9ff',BORDER_SCI:'#d8d0ff',BORDER_NUM:'#d8d8e8',TEXT_SCI:'#6d28d9',TEXT_NUM:'#1e1b2e',TEXT_DIM:'#c4b5fd',TEXT_ANS:'#ffffff',DIVIDER:'#d0cce8'};
+
+  const bn=lang==='bn';
   const[expr,setExpr]=useState('');
   const[result,setResult]=useState<string|number|null>(null);
   const[sci,setSci]=useState(false);
@@ -172,7 +177,8 @@ export default function GeneralCalc({history,onAdd,onClear}:Props){
   const showExpr=result!==null&&!!expr;
   const tabs=Object.keys(TAB_ROWS);
   const rows=sci?TAB_ROWS[tab]:null;
-  const btnH=sci?52:68;
+  // Responsive button height based on screen size
+  const btnH=sci?Math.max(40,Math.min(56,window.innerHeight*0.065)):Math.max(54,Math.min(72,window.innerHeight*0.085));
   const numFs=sci?20:26;
   const opFs=sci?22:28;
   const fnFs=sci?16:19;
@@ -182,9 +188,8 @@ export default function GeneralCalc({history,onAdd,onClear}:Props){
   return(
     <div style={{display:'flex',flexDirection:'column',height:'100%',overflow:'hidden',background:sci?CALC_BG:DISP_BG}}>
 
-      {/* ── Display area ── */}
-      <div style={{background:DISP_BG,flexShrink:0,minHeight:sci?88:140,display:'flex',flexDirection:'column',justifyContent:'flex-end',padding:'12px 18px 10px',overflow:'hidden'}}>
-        {/* Mode + deg toggle */}
+      {/* ── Display area — always dark background ── */}
+      <div style={{background:DISP_BG,flexShrink:0,minHeight:sci?72:110,maxHeight:sci?'20vh':'28vh',display:'flex',flexDirection:'column',justifyContent:'flex-end',padding:'10px 16px 8px',overflow:'hidden'}}>
         <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:10}}>
           <button onClick={()=>setSci(s=>!s)} style={{background:sci?'#2d1a4a':'#2c2c3a',border:`1.5px solid ${sci?'#7c3aed':'#3a3a4a'}`,color:sci?'#c4b5fd':'#8888aa',borderRadius:22,padding:'6px 14px',fontSize:12,fontWeight:800,fontFamily:'inherit',cursor:'pointer'}}>
             {sci?(bn?'সাধারণ':'Basic'):(bn?'বৈজ্ঞানিক':'Scientific')}
@@ -195,14 +200,14 @@ export default function GeneralCalc({history,onAdd,onClear}:Props){
             </button>
           )}
         </div>
-        {showExpr&&<div style={{color:TEXT_DIM,fontSize:exprFontSize(expr),textAlign:'right',fontFamily:"'Inter',monospace",lineHeight:1.4,wordBreak:'break-all',marginBottom:4}}>{expr}</div>}
-        <div ref={dispRef} style={{color:result!==null&&String(result)==='Error'?'#ff453a':TEXT_ANS,fontSize:resFontSize(displayVal),fontWeight:200,textAlign:'right',lineHeight:1.05,letterSpacing:-1,overflow:'hidden',whiteSpace:'nowrap',fontFamily:"'Inter',sans-serif",transition:'font-size 0.12s'}}>{displayVal}</div>
+        {/* Expression (previous input) — soft lavender, always visible on dark bg */}
+        {showExpr&&<div style={{color:'#b0a0e8',fontSize:exprFontSize(expr),textAlign:'right',fontFamily:"'Inter',monospace",lineHeight:1.4,wordBreak:'break-all',marginBottom:4}}>{expr}</div>}
+        {/* Main number — fontWeight 400 (typing) / 300 (result), with glow */}
+        <div ref={dispRef} style={{color:result!==null&&String(result)==='Error'?'#ff453a':TEXT_ANS,fontSize:resFontSize(displayVal),fontWeight:result!==null?300:400,textAlign:'right',lineHeight:1.05,letterSpacing:-1,overflow:'hidden',whiteSpace:'nowrap',fontFamily:"'Inter',sans-serif",transition:'font-size 0.12s',textShadow:`0 0 18px ${TEXT_ANS}44`}}>{displayVal}</div>
       </div>
 
-      {/* ── Calculator body — fills all space ── */}
+      {/* ── Calculator body ── */}
       <div style={{flex:1,background:CALC_BG,display:'flex',flexDirection:'column',overflow:'hidden',minHeight:0}}>
-
-        {/* Sci tabs */}
         {sci&&(
           <div style={{display:'flex',borderBottom:`1.5px solid #d8d0ff`,background:CALC_BG,flexShrink:0}}>
             {tabs.map(t2=>{
@@ -216,7 +221,6 @@ export default function GeneralCalc({history,onAdd,onClear}:Props){
           </div>
         )}
 
-        {/* Keypad — flex:1 fills remaining */}
         <div style={{flex:1,padding:'8px 10px 4px',display:'flex',flexDirection:'column',gap:6,overflow:'hidden',minHeight:0}}>
           {sci&&rows?(
             rows.map((row,ri)=>(
@@ -241,17 +245,16 @@ export default function GeneralCalc({history,onAdd,onClear}:Props){
               <div key={ri} style={{display:'flex',gap:10,flex:1,minHeight:0}}>
                 {row.map((key,ki)=>{
                   const isEq=key.type==='eq',isOp=key.type==='op',isFn=key.type==='fn',isDel=key.type==='del',isZero=key.type==='zero',isAct=activeOp===key.label;
-                  const bg=isEq?BTN_EQ:isOp?(isAct?TEXT_OP:'#e8e8f0'):isFn?'#c8c8d8':BTN_NUM;
-                  const fc=isEq?'#fff':isOp?(isAct?'#fff':TEXT_OP):isFn?'#1e1b2e':TEXT_NUM;
+                  const bg=isEq?BTN_EQ:isOp?(isAct?TEXT_OP:BTN_FN):isFn?BTN_FN:BTN_NUM;
+                  const fc=isEq?'#fff':isOp?(isAct?'#fff':TEXT_OP):isFn?TEXT_SCI:TEXT_NUM;
                   const fs=isEq?28:isOp?opFs:isFn?fnFs:numFs,fw=isEq?800:isOp?600:isFn?600:400;
-                  return(<button key={ki} onClick={()=>handleNum(key)} onMouseDown={bp} onMouseUp={br} onTouchStart={bp} onTouchEnd={br} style={{flex:isZero?2.18:1,height:btnH,background:bg,color:fc,border:`1.5px solid ${isEq?'transparent':isOp?`${TEXT_OP}30`:'#d0d0e0'}`,borderRadius:btnH/2,fontSize:fs,fontWeight:fw,fontFamily:"'Inter',sans-serif",cursor:'pointer',display:'flex',alignItems:'center',justifyContent:isZero?'flex-start':'center',paddingLeft:isZero?Math.floor(btnH*0.38):0,boxShadow:isEq?'0 4px 20px #7c3aed55':'0 1px 4px rgba(0,0,0,0.08)',transition:'transform 0.08s,opacity 0.08s,background 0.1s',minWidth:0,overflow:'hidden'}}>{key.label}</button>);
+                  return(<button key={ki} onClick={()=>handleNum(key)} onMouseDown={bp} onMouseUp={br} onTouchStart={bp} onTouchEnd={br} style={{flex:isZero?2.18:1,height:btnH,background:bg,color:fc,border:`1.5px solid ${isEq?'transparent':isOp?`${TEXT_OP}30`:BORDER_NUM}`,borderRadius:btnH/2,fontSize:fs,fontWeight:fw,fontFamily:"'Inter',sans-serif",cursor:'pointer',display:'flex',alignItems:'center',justifyContent:isZero?'flex-start':'center',paddingLeft:isZero?Math.floor(btnH*0.38):0,boxShadow:isEq?'0 4px 20px #7c3aed55':'0 1px 4px rgba(0,0,0,0.08)',transition:'transform 0.08s,opacity 0.08s,background 0.1s',minWidth:0,overflow:'hidden'}}>{key.label}</button>);
                 })}
               </div>
             ))
           )}
         </div>
 
-        {/* Sci help tip */}
         {sci&&(
           <div style={{padding:'2px 14px 4px',fontSize:10,color:'#9090b0',lineHeight:1.5,flexShrink:0}}>
             {tab==='Calculus'   &&'d/dx(x*x,x,3) | integral(x*x,x,0,1) | sum(x,x,1,10)'}
@@ -262,43 +265,39 @@ export default function GeneralCalc({history,onAdd,onClear}:Props){
         )}
       </div>
 
-      {/* ── Bottom bar: Share + History — styled to match CalcShell ── */}
-      <div style={{flexShrink:0,background:'#0d0d11',borderTop:'1px solid #2e2e38',padding:'10px 12px',paddingBottom:'max(env(safe-area-inset-bottom,0px),10px)',display:'flex',gap:8}}>
-        {/* Share button */}
+      {/* ── Bottom bar ── */}
+      <div style={{flexShrink:0,background:'var(--surface)',borderTop:'1px solid var(--border)',padding:'10px 12px',paddingBottom:'max(env(safe-area-inset-bottom,0px),10px)',display:'flex',gap:8}}>
         <button
           onClick={()=>result!==null&&result!=='Error'&&shareWA(buildShare('Calc',[`${expr} = ${result}`]))}
           disabled={result===null||result==='Error'}
-          style={{flex:1,padding:'14px 0',background:result!==null&&result!=='Error'?'#0d2e18':'#1a1a1e',color:result!==null&&result!=='Error'?'#25d366':'#3a3a48',border:`2px solid ${result!==null&&result!=='Error'?'#25d36640':'#2e2e38'}`,borderRadius:13,fontSize:15,fontWeight:800,fontFamily:'inherit',cursor:result!==null&&result!=='Error'?'pointer':'not-allowed',display:'flex',alignItems:'center',justifyContent:'center',gap:7,opacity:result!==null&&result!=='Error'?1:0.4,transition:'all 0.18s'}}>
+          style={{flex:1,padding:'14px 0',background:result!==null&&result!=='Error'?'#0d2e18':'var(--surface)',color:result!==null&&result!=='Error'?'#25d366':'var(--text4)',border:`2px solid ${result!==null&&result!=='Error'?'#25d36640':'var(--border)'}`,borderRadius:13,fontSize:15,fontWeight:800,fontFamily:'inherit',cursor:result!==null&&result!=='Error'?'pointer':'not-allowed',display:'flex',alignItems:'center',justifyContent:'center',gap:7,opacity:result!==null&&result!=='Error'?1:0.4,transition:'all 0.18s'}}>
           <FaShareAlt size={14}/> {bn?'শেয়ার':'Share'}
         </button>
-        {/* History button */}
-        <button onClick={()=>setHistOpen(o=>!o)} style={{width:52,flexShrink:0,padding:'14px 0',background:histOpen?'#2d1a4a':'#1a1a1e',color:histCount>0?'#7c3aed':'#6b6780',border:`2px solid ${histCount>0?'#7c3aed55':'#2e2e38'}`,borderRadius:13,cursor:'pointer',position:'relative',display:'flex',alignItems:'center',justifyContent:'center',transition:'all 0.18s'}}>
+        <button onClick={()=>setHistOpen(o=>!o)} style={{width:52,flexShrink:0,padding:'14px 0',background:histOpen?'#2d1a4a':'var(--surface)',color:histCount>0?'#7c3aed':'var(--text3)',border:`2px solid ${histCount>0?'#7c3aed55':'var(--border)'}`,borderRadius:13,cursor:'pointer',position:'relative',display:'flex',alignItems:'center',justifyContent:'center',transition:'all 0.18s'}}>
           <FaHistory size={17}/>
           {histCount>0&&<span style={{position:'absolute',top:4,right:4,background:'#7c3aed',color:'#fff',borderRadius:6,fontSize:8,fontWeight:900,padding:'1px 4px',minWidth:14,height:14,display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'monospace'}}>{histCount>99?'99+':histCount}</span>}
         </button>
       </div>
 
-      {/* History backdrop */}
       {histOpen&&<div onClick={()=>setHistOpen(false)} style={{position:'absolute',inset:0,zIndex:299,background:'rgba(0,0,0,0.45)'}}/>}
 
-      {/* History slide-up */}
       {histOpen&&(
-        <div style={{position:'absolute',bottom:0,left:0,right:0,zIndex:300,background:'#1a1a1e',border:'1.5px solid #2e2e38',borderRadius:'18px 18px 0 0',padding:'16px 16px 24px',maxHeight:'55%',display:'flex',flexDirection:'column',boxShadow:'0 -8px 40px rgba(0,0,0,0.6)'}}>
-          <div style={{width:36,height:4,borderRadius:2,background:'#2e2e38',margin:'0 auto 14px'}}/>
+        <div style={{position:'absolute',bottom:0,left:0,right:0,zIndex:300,background:'var(--surface)',border:'1.5px solid var(--border)',borderRadius:'18px 18px 0 0',padding:'16px 16px 24px',maxHeight:'55%',display:'flex',flexDirection:'column',boxShadow:'0 -8px 40px rgba(0,0,0,0.6)'}}>
+          <div style={{width:36,height:4,borderRadius:2,background:'var(--border)',margin:'0 auto 14px'}}/>
           <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:12,flexShrink:0}}>
             <div style={{display:'flex',alignItems:'center',gap:7}}>
               <FaHistory size={13} color="#7c3aed"/>
-              <span style={{fontWeight:800,fontSize:14,color:'#f1f0f5'}}>{t.history} ({histCount})</span>
+              <span style={{fontWeight:800,fontSize:14,color:'var(--text)'}}>{t.history} ({histCount})</span>
             </div>
             <div style={{display:'flex',gap:8}}>
               {histCount>0&&<button onClick={()=>onClear?.('general')} style={{background:'#2a0a0a',color:'#e74c3c',border:'none',borderRadius:8,padding:'6px 12px',fontSize:12,fontWeight:700,fontFamily:'inherit',cursor:'pointer',display:'flex',alignItems:'center',gap:5}}><FaTrash size={11}/>{t.clearHistory}</button>}
-              <button onClick={()=>setHistOpen(false)} style={{background:'#0f0f14',border:'1.5px solid #2e2e38',borderRadius:8,padding:'6px 10px',color:'#6b6780',cursor:'pointer',fontSize:12,fontFamily:'inherit',fontWeight:700,display:'flex',alignItems:'center',gap:5}}><FaChevronDown size={10}/>Close</button>
+              <button onClick={()=>setHistOpen(false)} style={{background:'var(--bg)',border:'1.5px solid var(--border)',borderRadius:8,padding:'6px 10px',color:'var(--text3)',cursor:'pointer',fontSize:12,fontFamily:'inherit',fontWeight:700,display:'flex',alignItems:'center',gap:5}}><FaChevronDown size={10}/>Close</button>
             </div>
           </div>
           <div style={{flex:1,overflowY:'auto',scrollbarWidth:'thin',scrollbarColor:'#7c3aed40 transparent'} as React.CSSProperties}>
-            {histCount===0?<div style={{textAlign:'center',color:'#6b6780',padding:'24px 0',fontSize:14}}>No history yet</div>:
+            {histCount===0?<div style={{textAlign:'center',color:'var(--text3)',padding:'24px 0',fontSize:14}}>No history yet</div>:
               [...history].reverse().map((item,i)=>(
-                <div key={i} style={{fontSize:13,padding:'9px 4px',borderBottom:i<histCount-1?'1px solid #2e2e38':'none',color:i===0?'#f1f0f5':'#6b6780',lineHeight:1.55,wordBreak:'break-word',fontWeight:i===0?600:400}}>
+                <div key={i} style={{fontSize:13,padding:'9px 4px',borderBottom:i<histCount-1?'1px solid var(--border)':'none',color:i===0?'var(--text)':'var(--text3)',lineHeight:1.55,wordBreak:'break-word',fontWeight:i===0?600:400}}>
                   {i===0&&<span style={{fontSize:9,fontWeight:800,color:'#7c3aed',background:'#7c3aed18',borderRadius:4,padding:'1px 5px',marginRight:6,letterSpacing:0.5}}>LATEST</span>}
                   {item}
                 </div>
