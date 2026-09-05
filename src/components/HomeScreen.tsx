@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import {
   FaCalculator, FaUniversity, FaBirthdayCake, FaWeight,
   FaFire, FaReceipt, FaChartLine, FaTshirt, FaRuler,
@@ -20,66 +20,20 @@ const T = {
   fontMono: "'Space Mono',monospace",
 };
 
-/**
- * PERMANENT RESPONSIVE GRID
- * ---------------------------------------------------------------
- * Design goals (mobile / tablet / desktop):
- *  - Pure CSS Grid — no JS pixel math, no ResizeObserver, no
- *    per-device magic numbers. Scales correctly on every screen.
- *  - Cards are always perfectly square (CSS aspect-ratio), so
- *    icon/label proportions never look "stretched" or "tiny".
- *  - Column count adapts via standard, well-tested breakpoints:
- *      < 480px   (phones)              -> 3 columns
- *      480–767px (large phones)        -> 4 columns
- *      768–1023px (tablets, portrait)  -> 5 columns
- *      >= 1024px (tablets landscape /
- *                 desktop / laptop)    -> 6 columns
- *  - Leftover vertical space (when there are fewer rows than fit
- *    the screen) is distributed EVENLY above/below the whole grid
- *    via `align-content: center` on the grid container — this is
- *    what permanently eliminates "dead space at the bottom": the
- *    space is never dumped in one place, it's balanced as margin.
- *  - Typography scales with `clamp()` tied to viewport width, so
- *    text stays readable from small phones up to desktop monitors
- *    without ever becoming illegibly small or comically large.
- * ---------------------------------------------------------------
- */
 const STYLES = `
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Space+Mono:wght@700&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body,#root{width:100%;height:100%;overflow:hidden;background:#07080d}
 @keyframes _floatUp{from{opacity:0;transform:translateY(14px) scale(0.92)}to{opacity:1;transform:none}}
-@keyframes _bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-5px) rotate(2deg)}}
-
 .hsc-theme-btn{transition:background 0.2s,color 0.2s;}
-
-/* ---- Responsive grid container ------------------------------- */
-.hsc-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:clamp(6px,1.8vw,16px);
-  align-content:center;     /* <-- balances leftover space, no dead zone */
-  justify-items:stretch;
-  width:100%;height:100%;
-  overflow:hidden;
-}
-@media (min-width:480px){  .hsc-grid{grid-template-columns:repeat(4,1fr);} }
-@media (min-width:768px){  .hsc-grid{grid-template-columns:repeat(5,1fr);} }
-@media (min-width:1024px){ .hsc-grid{grid-template-columns:repeat(6,1fr);} }
-@media (min-width:1440px){ .hsc-grid{grid-template-columns:repeat(7,1fr);} }
-
-/* ---- Card ------------------------------------------------------ */
+@keyframes _bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-5px) rotate(2deg)}}
 .hsc-card{
   position:relative;cursor:pointer;border:none;
-  aspect-ratio:1/1;width:100%;
   background:var(--surface);
   box-shadow:inset 0 0 0 1px var(--border);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   overflow:hidden;outline:none;
-  border-radius:clamp(10px,2vw,18px);
-  padding:clamp(6px,2.2%,16px);
   transition:transform .16s cubic-bezier(.22,1,.36,1),background .16s,box-shadow .16s;
-  animation:_floatUp .32s cubic-bezier(.16,1,.3,1) both;
 }
 .hsc-card::before{
   content:'';position:absolute;inset:0;border-radius:inherit;
@@ -94,39 +48,21 @@ html,body,#root{width:100%;height:100%;overflow:hidden;background:#07080d}
 }
 .hsc-card:active{transform:scale(0.93)!important;transition-duration:.06s}
 .hsc-card:focus-visible{box-shadow:0 0 0 2px var(--ac)}
-
 .hsc-badge{
-  position:absolute;top:5%;right:5%;
-  width:clamp(13px,7%,22px);height:clamp(13px,7%,22px);
-  background:var(--ac);color:#fff;
+  position:absolute;background:var(--ac);color:#fff;
   border-radius:5px;font-weight:900;
   display:flex;align-items:center;justify-content:center;
-  font-size:clamp(7px,3.2%,11px);
   font-family:'Space Mono',monospace;z-index:2;
 }
 .hsc-pod{
   display:flex;align-items:center;justify-content:center;flex-shrink:0;
-  width:clamp(28px,34%,56px);height:clamp(28px,34%,56px);
-  border-radius:clamp(6px,10%,14px);
-  margin-bottom:clamp(4px,6%,10px);
   background:var(--surface2);
   border:1.5px solid var(--border2,var(--border));
   transition:transform .16s,box-shadow .16s;
 }
 .hsc-card:hover .hsc-pod{transform:scale(1.1);box-shadow:0 0 10px var(--ac)3a}
-.hsc-pod svg{width:55%;height:55%}
-
-.hsc-lm{
-  font-weight:700;color:var(--text);overflow:hidden;text-overflow:ellipsis;
-  white-space:nowrap;display:block;width:100%;text-align:center;
-  font-size:clamp(10px,2.3vw,15px);
-}
-.hsc-ls{
-  font-weight:400;color:var(--text3);overflow:hidden;text-overflow:ellipsis;
-  white-space:nowrap;display:block;width:100%;text-align:center;
-  font-size:clamp(8px,1.9vw,12px);margin-top:2px;
-}
-
+.hsc-lm{font-weight:700;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;width:100%;text-align:center}
+.hsc-ls{font-weight:400;color:var(--text3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;width:100%;text-align:center}
 .hsc-langbtn{
   background:var(--surface);border:1px solid var(--border);
   color:var(--text2);cursor:pointer;display:flex;align-items:center;gap:6px;
@@ -143,14 +79,66 @@ const ICON_MAP: Record<string, React.ComponentType<{ size?: number; color?: stri
   FaRulerCombined, FaMapMarkedAlt, FaBalanceScale,
 };
 
+function numCols(w: number): number {
+  if (w >= 1024) return 6;
+  if (w >= 768)  return 4;
+  return 3;
+}
+
+interface Layout {
+  cols: number; rows: number;
+  cell: number; gap: number; pad: number;
+  podSz: number; podR: number; iconSz: number;
+  fMain: number; fSub: number; cardR: number;
+  mb: number; padCard: number;
+  badgeSz: number; badgeFs: number;
+  lastRowCount: number;
+}
+
+function calcLayout(cw: number, ch: number, hdrH: number): Layout {
+  const cols   = numCols(cw);
+  const total  = APPS.length;
+  const rows   = Math.ceil(total / cols);
+  const gap    = Math.max(6, Math.round(cw * 0.016));
+  const pad    = Math.max(8, Math.round(cw * 0.022));
+  const labelH = 26; // section label height + margin
+
+  // Available space â€” tab bar is a SIBLING in App.tsx, not inside here
+  const availW = cw - pad * 2;
+  const availH = ch - hdrH - labelH - pad * 2;
+
+  const cellW  = Math.floor((availW - gap * (cols - 1)) / cols);
+  const cellH  = Math.floor((availH - gap * (rows - 1)) / rows);
+  const cell   = Math.max(44, Math.min(cellW, cellH)); // square: smaller wins
+
+  const podSz   = Math.floor(cell * 0.36);
+  const podR    = Math.max(6,  Math.floor(podSz  * 0.28));
+  const iconSz  = Math.max(13, Math.floor(podSz  * 0.52));
+  const fMain   = Math.max(9,  Math.min(14, Math.floor(cell * 0.115)));
+  const fSub    = Math.max(8,  Math.min(12, Math.floor(cell * 0.095)));
+  const cardR   = Math.max(8,  Math.floor(cell   * 0.14));
+  const mb      = Math.max(4,  Math.floor(cell   * 0.06));
+  const padCard = Math.max(4,  Math.floor(cell   * 0.07));
+  const badgeSz = Math.max(13, Math.floor(cell   * 0.13));
+  const badgeFs = Math.max(7,  Math.floor(badgeSz * 0.6));
+  const lastRowCount = total - (rows - 1) * cols;
+
+  return { cols, rows, cell, gap, pad, podSz, podR, iconSz,
+           fMain, fSub, cardR, mb, padCard, badgeSz, badgeFs, lastRowCount };
+}
+
 interface Props {
   onOpen:   (id: string) => void;
   history:  Record<string, string[]>;
+  // tabBarHeight no longer needed â€” BottomNav is a sibling in App.tsx
 }
 
 export default function HomeScreen({ onOpen, history }: Props) {
   const { t, lang, toggle } = useLang();
   const { isDark, toggleTheme } = useTheme();
+  const rootRef = useRef<HTMLDivElement>(null);
+  const hdrRef  = useRef<HTMLElement>(null);
+  const [layout, setLayout] = useState<Layout | null>(null);
 
   useEffect(() => {
     const id = 'hsc-styles';
@@ -161,9 +149,33 @@ export default function HomeScreen({ onOpen, history }: Props) {
     }
   }, []);
 
+  const recompute = useCallback(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    // Measure our actual container â€” not window â€” so it works in any shell
+    const { width: cw, height: ch } = root.getBoundingClientRect();
+    const hdrH = hdrRef.current?.offsetHeight ?? 56;
+    if (cw > 0 && ch > 0) setLayout(calcLayout(cw, ch, hdrH));
+  }, []);
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const ro = new ResizeObserver(() => recompute());
+    ro.observe(root);
+    recompute();
+    return () => ro.disconnect();
+  }, [recompute]);
+
+  const pad = layout
+    ? Math.max(8, Math.round((rootRef.current?.getBoundingClientRect().width ?? 375) * 0.022))
+    : 10;
+
   return (
     <div
+      ref={rootRef}
       style={{
+        // Fill whatever the parent flex item gives us (content area in App.tsx)
         width: '100%', height: '100%',
         display: 'flex', flexDirection: 'column',
         background: T.bgBody, color: T.textPri,
@@ -179,7 +191,7 @@ export default function HomeScreen({ onOpen, history }: Props) {
       }} />
 
       {/* HEADER */}
-      <header style={{
+      <header ref={hdrRef} style={{
         flexShrink: 0, zIndex: 10, position: 'relative',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10,
         paddingTop:    'max(env(safe-area-inset-top,0px),12px)',
@@ -206,77 +218,131 @@ export default function HomeScreen({ onOpen, history }: Props) {
             }}>{t.tagline}</p>
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
-          <button
-            className="hsc-theme-btn"
-            onClick={toggleTheme}
-            title={isDark ? 'Day mode' : 'Night mode'}
-            style={{
-              background: isDark ? '#1a1500' : '#f0eeff',
-              border: `1px solid ${isDark ? '#f59e0b40' : '#7c3aed40'}`,
-              color: isDark ? '#f59e0b' : '#7c3aed',
-              borderRadius: 20, padding: '5px 12px',
-              fontSize: 11, fontWeight: 700, cursor: 'pointer',
-              display: 'flex', alignItems: 'center', gap: 5,
-              fontFamily: 'inherit',
-            }}
-          >
-            {isDark ? <FaSun size={11} /> : <FaMoon size={11} />}
-            <span>{isDark ? (lang === 'bn' ? 'দিন' : 'Day') : (lang === 'bn' ? 'রাত' : 'Night')}</span>
-          </button>
-          <button className="hsc-langbtn" onClick={toggle}>
-            <FaGlobe size={11} color="#6366f1" />
-            <span>{lang === 'bn' ? 'EN' : 'বাং'}</span>
-          </button>
-        </div>
+        <button
+          className="hsc-theme-btn"
+          onClick={toggleTheme}
+          title={isDark ? 'Day mode' : 'Night mode'}
+          style={{
+            background: isDark ? '#1a1500' : '#f0eeff',
+            border: `1px solid ${isDark ? '#f59e0b40' : '#7c3aed40'}`,
+            color: isDark ? '#f59e0b' : '#7c3aed',
+            borderRadius: 20, padding: '5px 12px',
+            fontSize: 11, fontWeight: 700, cursor: 'pointer',
+            display: 'flex', alignItems: 'center', gap: 5,
+            fontFamily: 'inherit',
+          }}
+        >
+          {isDark ? <FaSun size={11} /> : <FaMoon size={11} />}
+          <span>{isDark ? (lang === 'bn' ? 'দিন' : 'Day') : (lang === 'bn' ? 'রাত' : 'Night')}</span>
+        </button>
+        <button className="hsc-langbtn" onClick={toggle}>
+          <FaGlobe size={11} color="#6366f1" />
+          <span>{lang === 'bn' ? 'EN' : 'বাং'}</span>
+        </button>
       </header>
 
-      {/* MAIN — CSS Grid fills all remaining space, self-balances leftover height */}
-      <main style={{
-        flex: 1, minHeight: 0, zIndex: 1, position: 'relative',
-        display: 'flex', flexDirection: 'column',
-        padding: 'clamp(8px,2.2vw,20px)',
-        overflow: 'hidden',
-      }}>
-        <p style={{
-          fontFamily: T.fontMono, fontSize: 9, fontWeight: 700,
-          color: T.textMuted, letterSpacing: '2px', textTransform: 'uppercase',
-          marginBottom: 8, flexShrink: 0,
-        }}>{t.selectCalc}</p>
+      {/* MAIN GRID */}
+      {layout && (() => {
+        const {
+          cols, rows, cell, gap, pad: lpad, lastRowCount,
+          podSz, podR, iconSz, fMain, fSub,
+          cardR, mb, padCard, badgeSz, badgeFs,
+        } = layout;
 
-        <div className="hsc-grid" style={{ flex: 1, minHeight: 0 }}>
-          {APPS.map((app, appIdx) => {
-            const Icon   = ICON_MAP[app.icon];
-            const count  = (history[app.id] || []).length;
-            const appT   = t.apps[app.id as keyof typeof t.apps];
-            const accent = app.color || '#6366f1';
-            const label  = appT?.label || app.id;
-            const sub    = lang === 'bn' ? (appT?.desc || '') : '';
+        return (
+          <main style={{
+            flex: 1, minHeight: 0, zIndex: 1, position: 'relative',
+            display: 'flex', flexDirection: 'column',
+            padding: `10px ${lpad}px`,
+            overflow: 'hidden',
+          }}>
+            {/* Section label */}
+            <p style={{
+              fontFamily: T.fontMono, fontSize: 9, fontWeight: 700,
+              color: T.textMuted, letterSpacing: '2px', textTransform: 'uppercase',
+              marginBottom: 8, flexShrink: 0,
+            }}>{t.selectCalc}</p>
 
-            return (
-              <button
-                key={app.id}
-                className="hsc-card"
-                onClick={() => onOpen(app.id)}
-                aria-label={label}
-                style={{
-                  '--ac': accent,
-                  animationDelay: `${appIdx * 0.02}s`,
-                } as React.CSSProperties}
-              >
-                {count > 0 && <span className="hsc-badge">{count}</span>}
-                <div className="hsc-pod">
-                  {Icon && <Icon color={accent} />}
-                </div>
-                <div style={{ width: '100%', minWidth: 0 }}>
-                  <span className="hsc-lm">{label}</span>
-                  {sub && <span className="hsc-ls">{sub}</span>}
-                </div>
-              </button>
-            );
-          })}
-        </div>
-      </main>
+            {/* Grid column â€” fills remaining height evenly across rows */}
+            <div style={{
+              flex: 1, minHeight: 0,
+              display: 'flex', flexDirection: 'column',
+              gap,
+            }}>
+              {Array.from({ length: rows }, (_, r) => {
+                const isLast    = r === rows - 1;
+                const appsInRow = isLast ? lastRowCount : cols;
+                const startIdx  = r * cols;
+
+                return (
+                  <div key={r} style={{
+                    display: 'flex', gap,
+                    flex: 1, minHeight: 0,
+                  }}>
+                    {Array.from({ length: appsInRow }, (_, ci) => {
+                      const appIdx = startIdx + ci;
+                      const app    = APPS[appIdx];
+                      const Icon   = ICON_MAP[app.icon];
+                      const count  = (history[app.id] || []).length;
+                      const appT   = t.apps[app.id as keyof typeof t.apps];
+                      const accent = app.color || '#6366f1';
+                      const label  = appT?.label || app.id;
+                      const sub    = lang === 'bn' ? (appT?.desc || '') : '';
+
+                      return (
+                        <button
+                          key={app.id}
+                          className="hsc-card"
+                          onClick={() => onOpen(app.id)}
+                          aria-label={label}
+                          style={{
+                            '--ac': accent,
+                            flex: 1, minWidth: 0,
+                            height: '100%',
+                            borderRadius: cardR,
+                            padding: padCard,
+                            animationName: '_floatUp',
+                            animationDuration: '0.32s',
+                            animationTimingFunction: 'cubic-bezier(.16,1,.3,1)',
+                            animationDelay: `${appIdx * 0.02}s`,
+                            animationFillMode: 'both',
+                          } as React.CSSProperties}
+                        >
+                          {count > 0 && (
+                            <span className="hsc-badge" style={{
+                              top: 5, right: 5,
+                              width: badgeSz, height: badgeSz,
+                              fontSize: badgeFs,
+                              borderRadius: Math.floor(badgeSz * 0.4),
+                            }}>{count}</span>
+                          )}
+                          <div className="hsc-pod" style={{
+                            width: podSz, height: podSz,
+                            borderRadius: podR, marginBottom: mb,
+                          }}>
+                            {Icon && <Icon size={iconSz} color={accent} />}
+                          </div>
+                          <div style={{ width: '100%', minWidth: 0 }}>
+                            <span className="hsc-lm" style={{
+                              fontSize: fMain, fontFamily: T.font, lineHeight: 1.2,
+                            }}>{label}</span>
+                            {sub && (
+                              <span className="hsc-ls" style={{
+                                fontSize: fSub, fontFamily: T.font,
+                                lineHeight: 1.15, display: 'block', marginTop: 2,
+                              }}>{sub}</span>
+                            )}
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                );
+              })}
+            </div>
+          </main>
+        );
+      })()}
     </div>
   );
 }
