@@ -103,7 +103,7 @@ function calcLayout(cw: number, ch: number, hdrH: number): Layout {
   const pad    = Math.max(8, Math.round(cw * 0.022));
   const labelH = 26; // section label height + margin
 
-  // Available space â€” tab bar is a SIBLING in App.tsx, not inside here
+  // Available space — tab bar is a SIBLING in App.tsx, not inside here
   const availW = cw - pad * 2;
   const availH = ch - hdrH - labelH - pad * 2;
 
@@ -130,7 +130,7 @@ function calcLayout(cw: number, ch: number, hdrH: number): Layout {
 interface Props {
   onOpen:   (id: string) => void;
   history:  Record<string, string[]>;
-  // tabBarHeight no longer needed â€” BottomNav is a sibling in App.tsx
+  // tabBarHeight no longer needed — BottomNav is a sibling in App.tsx
 }
 
 export default function HomeScreen({ onOpen, history }: Props) {
@@ -152,7 +152,7 @@ export default function HomeScreen({ onOpen, history }: Props) {
   const recompute = useCallback(() => {
     const root = rootRef.current;
     if (!root) return;
-    // Measure our actual container â€” not window â€” so it works in any shell
+    // Measure our actual container — not window — so it works in any shell
     const { width: cw, height: ch } = root.getBoundingClientRect();
     const hdrH = hdrRef.current?.offsetHeight ?? 56;
     if (cw > 0 && ch > 0) setLayout(calcLayout(cw, ch, hdrH));
@@ -263,7 +263,7 @@ export default function HomeScreen({ onOpen, history }: Props) {
               marginBottom: 8, flexShrink: 0,
             }}>{t.selectCalc}</p>
 
-            {/* Grid column â€” fills remaining height evenly across rows */}
+            {/* Grid column — fills remaining height evenly across rows */}
             <div style={{
               flex: 1, minHeight: 0,
               display: 'flex', flexDirection: 'column',
