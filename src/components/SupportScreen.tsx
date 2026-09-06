@@ -60,7 +60,7 @@ export default function SupportScreen() {
           MARIO SMART CALCULATOR
         </div>
         <div style={{ fontSize:13, color:'#a8a4b8', fontWeight:500, marginBottom:16, lineHeight:1.5 }}>
-          {bn ? '১৩টি স্মার্ট ক্যালকুলেটর — একটি অ্যাপে' : '13 Smart Calculators in One App'}
+          {bn ? 'প্রয়োজনীয় সব স্মার্ট ক্যালকুলেটর -একটি অ্যাপেই' : 'All required smart calculators -in one app'}
         </div>
 
         {/* Developer badge */}
@@ -151,7 +151,7 @@ export default function SupportScreen() {
             ['📤', bn?'WhatsApp শেয়ার':'WhatsApp Share'],
             ['🌐', bn?'বাংলা ও ইংরেজি':'Bangla & English'],
             ['📱', bn?'মোবাইল বান্ধব':'Mobile Friendly'],
-            ['🔢', bn?'১৩টি ক্যালকুলেটর':'13 Calculators'],
+            ['🔢', bn?'১৩+ ক্যালকুলেটর':'13+ Calculators'],
             ['🇧🇩', bn?'বাংলাদেশ স্ট্যান্ডার্ড':'BD Standards'],
           ] as [string,string][]).map(([icon,label])=>(
             <div key={label} style={{
