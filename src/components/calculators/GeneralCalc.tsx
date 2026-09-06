@@ -45,28 +45,28 @@ const TAB_ROWS: Record<string,Row[]> = {
     {sci:[{label:'□/□',token:'/'},{label:'□|□',token:'|('},{label:'≤',token:'≤'}],num:[{label:'7',type:'num'},{label:'8',type:'num'},{label:'9',type:'num'},{label:'÷',type:'op'}]},
     {sci:[{label:'log□',token:'log('},{label:'□!',token:'!'},{label:'>',token:'>'}],num:[{label:'4',type:'num'},{label:'5',type:'num'},{label:'6',type:'num'},{label:'×',type:'op'}]},
     {sci:[{label:'i',token:'i',color:'#2563eb'},{label:'%',token:'%'},{label:'≥',token:'≥'}],num:[{label:'1',type:'num'},{label:'2',type:'num'},{label:'3',type:'num'},{label:'−',type:'op'}]},
-    {sci:[{label:'x',token:'x'},{label:'y',token:'y'},{label:'=',token:'=='}],num:[{label:'0',type:'zero'},{label:'.',type:'num'},{label:'▶',type:'eq'},{label:'+',type:'op'}]},
+    {sci:[{label:'x',token:'x'},{label:'y',token:'y'},{label:'=',token:'=='}],num:[{label:'0',type:'zero'},{label:'.',type:'num'},{label:'=',type:'eq'},{label:'+',type:'op'}]},
   ],
   Trigonometry:[
     {sci:[{label:'sin',token:'sin('},{label:'cos',token:'cos('},{label:'tan',token:'tan('}],num:[{label:'(',type:'fn'},{label:')',type:'fn'},{label:'⌫',type:'del'},{label:'AC',type:'fn'}]},
     {sci:[{label:'sin⁻¹',token:'sin⁻¹('},{label:'cos⁻¹',token:'cos⁻¹('},{label:'tan⁻¹',token:'tan⁻¹('}],num:[{label:'7',type:'num'},{label:'8',type:'num'},{label:'9',type:'num'},{label:'÷',type:'op'}]},
     {sci:[{label:'cot',token:'cot('},{label:'sec',token:'sec('},{label:'csc',token:'csc('}],num:[{label:'4',type:'num'},{label:'5',type:'num'},{label:'6',type:'num'},{label:'×',type:'op'}]},
     {sci:[{label:'π',token:'π',color:'#b45309'},{label:'e',token:'e',color:'#b45309'},{label:'φ',token:'φ',color:'#b45309'}],num:[{label:'1',type:'num'},{label:'2',type:'num'},{label:'3',type:'num'},{label:'−',type:'op'}]},
-    {sci:[{label:'DEG',token:'__DEG'},{label:'RAD',token:'__RAD'},{label:'°→r',token:'*(π/180)'}],num:[{label:'0',type:'zero'},{label:'.',type:'num'},{label:'▶',type:'eq'},{label:'+',type:'op'}]},
+    {sci:[{label:'DEG',token:'__DEG'},{label:'RAD',token:'__RAD'},{label:'°→r',token:'*(π/180)'}],num:[{label:'0',type:'zero'},{label:'.',type:'num'},{label:'=',type:'eq'},{label:'+',type:'op'}]},
   ],
   Calculus:[
     {sci:[{label:'d/dx',token:'d/dx(',unsupported:true},{label:'∫dx',token:'∫(',unsupported:true},{label:'Σ',token:'Σ(',unsupported:true}],num:[{label:'(',type:'fn'},{label:')',type:'fn'},{label:'⌫',type:'del'},{label:'AC',type:'fn'}]},
     {sci:[{label:'nPr',token:'nPr('},{label:'nCr',token:'nCr('},{label:'n!',token:'!'}],num:[{label:'7',type:'num'},{label:'8',type:'num'},{label:'9',type:'num'},{label:'÷',type:'op'}]},
     {sci:[{label:'log',token:'log('},{label:'ln',token:'ln('},{label:'log₂',token:'log₂('}],num:[{label:'4',type:'num'},{label:'5',type:'num'},{label:'6',type:'num'},{label:'×',type:'op'}]},
     {sci:[{label:'√',token:'√('},{label:'∛',token:'∛('},{label:'xʸ',token:'**'}],num:[{label:'1',type:'num'},{label:'2',type:'num'},{label:'3',type:'num'},{label:'−',type:'op'}]},
-    {sci:[{label:'GCD',token:'gcd('},{label:'LCM',token:'lcm('},{label:'x²',token:'**2'}],num:[{label:'0',type:'zero'},{label:'.',type:'num'},{label:'▶',type:'eq'},{label:'+',type:'op'}]},
+    {sci:[{label:'GCD',token:'gcd('},{label:'LCM',token:'lcm('},{label:'x²',token:'**2'}],num:[{label:'0',type:'zero'},{label:'.',type:'num'},{label:'=',type:'eq'},{label:'+',type:'op'}]},
   ],
   Hyperbolic:[
     {sci:[{label:'sinh',token:'sinh('},{label:'cosh',token:'cosh('},{label:'tanh',token:'tanh('}],num:[{label:'(',type:'fn'},{label:')',type:'fn'},{label:'⌫',type:'del'},{label:'AC',type:'fn'}]},
     {sci:[{label:'coth',token:'coth('},{label:'sech',token:'sech('},{label:'csch',token:'csch('}],num:[{label:'7',type:'num'},{label:'8',type:'num'},{label:'9',type:'num'},{label:'÷',type:'op'}]},
     {sci:[{label:'10ˣ',token:'10ˣ('},{label:'eˣ',token:'eˣ('},{label:'2ˣ',token:'2ˣ('}],num:[{label:'4',type:'num'},{label:'5',type:'num'},{label:'6',type:'num'},{label:'×',type:'op'}]},
     {sci:[{label:'⌊x⌋',token:'⌊'},{label:'⌈x⌉',token:'⌈'},{label:'|x|',token:'|x|('}],num:[{label:'1',type:'num'},{label:'2',type:'num'},{label:'3',type:'num'},{label:'−',type:'op'}]},
-    {sci:[{label:'∞',token:'Infinity',color:'#b45309'},{label:'π',token:'π',color:'#b45309'},{label:'e',token:'e',color:'#b45309'}],num:[{label:'0',type:'zero'},{label:'.',type:'num'},{label:'▶',type:'eq'},{label:'+',type:'op'}]},
+    {sci:[{label:'∞',token:'Infinity',color:'#b45309'},{label:'π',token:'π',color:'#b45309'},{label:'e',token:'e',color:'#b45309'}],num:[{label:'0',type:'zero'},{label:'.',type:'num'},{label:'=',type:'eq'},{label:'+',type:'op'}]},
   ],
 };
 
@@ -75,7 +75,7 @@ const BASIC_ROWS: NumKey[][] = [
   [{label:'7',type:'num'},{label:'8',type:'num'},{label:'9',type:'num'},{label:'×',type:'op'}],
   [{label:'4',type:'num'},{label:'5',type:'num'},{label:'6',type:'num'},{label:'−',type:'op'}],
   [{label:'1',type:'num'},{label:'2',type:'num'},{label:'3',type:'num'},{label:'+',type:'op'}],
-  [{label:'0',type:'zero'},{label:'.',type:'num'},{label:'⌫',type:'del'},{label:'▶',type:'eq'}],
+  [{label:'0',type:'zero'},{label:'.',type:'num'},{label:'⌫',type:'del'},{label:'=',type:'eq'}],
 ];
 
 function fact(n:number):number{n=Math.floor(Math.abs(n));if(n>170)return Infinity;if(n<=1)return 1;let r=1;for(let i=2;i<=n;i++)r*=i;return r;}
@@ -169,7 +169,7 @@ export default function GeneralCalc({history,onAdd,onClear}:Props){
     onAdd('general',`${expr} = ${r}`);
   };
   const handleSci=(key:SciKey)=>{if(key.unsupported){return;}if(key.token==='__DEG'){setDeg(true);return;}if(key.token==='__RAD'){setDeg(false);return;}ap(key.token);};
-  const handleNum=(key:NumKey)=>{if(key.type==='eq'||key.label==='▶'){calc();return;}if(key.label==='AC'){clr();return;}if(key.label==='⌫'){del();return;}if(key.label==='+/−'){setExpr(e=>e.startsWith('-')?e.slice(1):'-'+e);return;}if(key.type==='op')setActiveOp(key.label);ap(key.label);};
+  const handleNum=(key:NumKey)=>{if(key.type==='eq'||key.label==='='){calc();return;}if(key.label==='AC'){clr();return;}if(key.label==='⌫'){del();return;}if(key.label==='+/−'){setExpr(e=>e.startsWith('-')?e.slice(1):'-'+e);return;}if(key.type==='op')setActiveOp(key.label);ap(key.label);};
   const bp=(e:any)=>{e.currentTarget.style.transform='scale(0.91)';e.currentTarget.style.opacity='0.75';};
   const br=(e:any)=>{e.currentTarget.style.transform='';e.currentTarget.style.opacity='1';};
 

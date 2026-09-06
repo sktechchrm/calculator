@@ -3,7 +3,7 @@ import {
   FaCalculator, FaUniversity, FaBirthdayCake, FaWeight,
   FaFire, FaReceipt, FaChartLine, FaTshirt, FaRuler,
   FaExchangeAlt, FaRulerCombined, FaMapMarkedAlt,
-  FaBalanceScale, FaQuestionCircle,
+  FaBalanceScale, FaQuestionCircle, FaPiggyBank, FaMosque,
 } from 'react-icons/fa';
 
 import { LangProvider, useLang } from './context/LangContext.tsx';
@@ -29,6 +29,8 @@ import GSizeCalc      from './components/calculators/GSizeCalc.tsx';
 import UnitCalc       from './components/calculators/UnitCalc.tsx';
 import BdLandCalc     from './components/calculators/BdLandCalc.tsx';
 import BdWeightCalc   from './components/calculators/BdWeightCalc.tsx';
+import DepositCalc    from './components/calculators/DepositCalc.tsx';
+import ZakatCalc      from './components/calculators/ZakatCalc.tsx';
 
 const SCREENS: Record<string, React.ComponentType<any>> = {
   general:  GeneralCalc,
@@ -44,12 +46,15 @@ const SCREENS: Record<string, React.ComponentType<any>> = {
   unit:     UnitCalc,
   bdland:   BdLandCalc,
   bdweight: BdWeightCalc,
+  deposit:  DepositCalc,
+  zakat:    ZakatCalc,
 };
 
 const ICONS: Record<string, React.ComponentType<{ size?: number; color?: string }>> = {
   FaCalculator, FaUniversity, FaBirthdayCake, FaWeight,
   FaFire, FaReceipt, FaChartLine, FaTshirt, FaRuler,
   FaExchangeAlt, FaRulerCombined, FaMapMarkedAlt, FaBalanceScale,
+  FaPiggyBank, FaMosque,
 };
 
 const APP_LABELS: Record<string, { en: string; bn: string }> = {
@@ -66,6 +71,8 @@ const APP_LABELS: Record<string, { en: string; bn: string }> = {
   unit:     { en: 'Unit Convert', bn: 'ইউনিট' },
   bdland:   { en: 'Land',         bn: 'ভূমির মাপ' },
   bdweight: { en: 'Goods Weight', bn: 'পণ্যের ওজন' },
+  deposit:  { en: 'Deposit',      bn: 'ডিপোজিট' },
+  zakat:    { en: 'Zakat',        bn: 'যাকাত' },
   support:  { en: 'Support',      bn: 'সাপোর্ট' },
 };
 
@@ -127,6 +134,10 @@ Enter value, select unit, press Convert.`,
 পরিমাণ দিন, একক বেছে নিন, রূপান্তর চাপুন।` },
   bdweight: { en: 'Enter weight/quantity, select the unit (Maund, Seer, kg etc.).\nEnter price per kg, then Calculate total price.',
                bn: 'ওজন দিন, একক বেছে নিন (মণ, সের, কেজি ইত্যাদি)।\nপ্রতি কেজি দাম দিয়ে হিসাব চাপুন।' },
+  deposit:  { en: 'Choose FDR (lump-sum) or DPS (monthly deposit).\nEnter amount, annual interest rate % and duration in years.\nPress Calculate for maturity amount.',
+               bn: 'এফডিআর (এককালীন) বা ডিপিএস (মাসিক জমা) বেছে নিন।\nপরিমাণ, বার্ষিক সুদের হার ও মেয়াদ বছরে দিন।\nহিসাব চাপুন — মেয়াদপূর্তির পরিমাণ দেখুন।' },
+  zakat:    { en: 'Choose Gold or Silver Nisab standard.\nEnter the current price per gram, your cash, gold, silver, business assets, and any debts.\nPress Calculate to see if Zakat is due and how much.',
+               bn: 'স্বর্ণ বা রৌপ্য নিসাব মান বেছে নিন।\nআজকের প্রতি গ্রাম দাম, নগদ, স্বর্ণ, রৌপ্য, ব্যবসায়িক সম্পদ ও ঋণ দিন।\nহিসাব চাপুন — যাকাত ফরজ কিনা ও কত তা দেখুন।' },
   support:  { en: '', bn: '' },
 };
 

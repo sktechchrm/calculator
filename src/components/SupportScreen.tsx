@@ -74,7 +74,7 @@ export default function SupportScreen() {
             <div style={{ fontSize:9, color:'#6b6780', fontWeight:600, letterSpacing:0.5 }}>
               {bn?'ডেভেলপড বাই':'DEVELOPED BY'}
             </div>
-            <div style={{ fontSize:13, color:'#e8e8e8', fontWeight:800 }}>SK-Technology</div>
+            <div style={{ fontSize:13, color:'#e8e8e8', fontWeight:800 }}>SK BD TECHNOLOGY</div>
           </div>
         </div>
       </div>
@@ -168,10 +168,10 @@ export default function SupportScreen() {
         {/* Footer */}
         <div style={{ textAlign:'center', padding:'0 0 12px' }}>
           <div style={{ fontSize:11, color:'#6b6780', marginBottom:6 }}>
-            <span style={{ color:'#c41e3a', fontWeight:700 }}>SK-Technology</span>
+            <span style={{ color:'#c41e3a', fontWeight:700 }}>SK BD TECHNOLOGY</span>
           </div>
           <div style={{ fontSize:10, color:'#3a3a48' }}>
-            {bn?'সর্বস্বত্ব সংরক্ষিত © ২০২৫':'All Rights Reserved © 2025'}
+            {bn?'সর্বস্বত্ব সংরক্ষিত © ২০২৬':'All Rights Reserved © 2026'}
           </div>
         </div>
       </div>

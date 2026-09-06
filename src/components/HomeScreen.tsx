@@ -3,7 +3,7 @@ import {
   FaCalculator, FaUniversity, FaBirthdayCake, FaWeight,
   FaFire, FaReceipt, FaChartLine, FaTshirt, FaRuler,
   FaExchangeAlt, FaGlobe, FaRulerCombined, FaMapMarkedAlt, FaBalanceScale,
-  FaSun, FaMoon,
+  FaSun, FaMoon, FaPiggyBank, FaMosque,
 } from 'react-icons/fa';
 import { useLang } from '../context/LangContext.tsx';
 import { useTheme } from '../context/ThemeContext.tsx';
@@ -76,7 +76,7 @@ html,body,#root{width:100%;height:100%;overflow:hidden;background:#07080d}
 const ICON_MAP: Record<string, React.ComponentType<{ size?: number; color?: string }>> = {
   FaCalculator, FaUniversity, FaBirthdayCake, FaWeight,
   FaFire, FaReceipt, FaChartLine, FaTshirt, FaRuler, FaExchangeAlt,
-  FaRulerCombined, FaMapMarkedAlt, FaBalanceScale,
+  FaRulerCombined, FaMapMarkedAlt, FaBalanceScale, FaPiggyBank, FaMosque,
 };
 
 function numCols(w: number): number {
