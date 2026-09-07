@@ -3,7 +3,7 @@ import {
   FaCalculator, FaUniversity, FaBirthdayCake, FaWeight,
   FaFire, FaReceipt, FaChartLine, FaTshirt, FaRuler,
   FaExchangeAlt, FaRulerCombined, FaMapMarkedAlt,
-  FaBalanceScale, FaQuestionCircle, FaPiggyBank, FaMosque,
+  FaBalanceScale, FaQuestionCircle, FaPiggyBank, FaMosque, FaGavel,
 } from 'react-icons/fa';
 
 import { LangProvider, useLang } from './context/LangContext.tsx';
@@ -31,6 +31,7 @@ import BdLandCalc     from './components/calculators/BdLandCalc.tsx';
 import BdWeightCalc   from './components/calculators/BdWeightCalc.tsx';
 import DepositCalc    from './components/calculators/DepositCalc.tsx';
 import ZakatCalc      from './components/calculators/ZakatCalc.tsx';
+import InheritanceCalc from './components/calculators/Inheritancecalc.tsx';
 
 const SCREENS: Record<string, React.ComponentType<any>> = {
   general:  GeneralCalc,
@@ -48,13 +49,14 @@ const SCREENS: Record<string, React.ComponentType<any>> = {
   bdweight: BdWeightCalc,
   deposit:  DepositCalc,
   zakat:    ZakatCalc,
+  inheritance: InheritanceCalc,
 };
 
 const ICONS: Record<string, React.ComponentType<{ size?: number; color?: string }>> = {
   FaCalculator, FaUniversity, FaBirthdayCake, FaWeight,
   FaFire, FaReceipt, FaChartLine, FaTshirt, FaRuler,
   FaExchangeAlt, FaRulerCombined, FaMapMarkedAlt, FaBalanceScale,
-  FaPiggyBank, FaMosque,
+  FaPiggyBank, FaMosque, FaGavel,
 };
 
 const APP_LABELS: Record<string, { en: string; bn: string }> = {
@@ -73,6 +75,7 @@ const APP_LABELS: Record<string, { en: string; bn: string }> = {
   bdweight: { en: 'Goods Weight', bn: 'পণ্যের ওজন' },
   deposit:  { en: 'Deposit',      bn: 'ডিপোজিট' },
   zakat:    { en: 'Zakat',        bn: 'যাকাত' },
+  inheritance: { en: 'Property Distribution', bn: 'সম্পত্তি বণ্টন' },
   support:  { en: 'Support',      bn: 'সাপোর্ট' },
 };
 
@@ -138,6 +141,8 @@ Enter value, select unit, press Convert.`,
                bn: 'এফডিআর (এককালীন) বা ডিপিএস (মাসিক জমা) বেছে নিন।\nপরিমাণ, বার্ষিক সুদের হার ও মেয়াদ বছরে দিন।\nহিসাব চাপুন — মেয়াদপূর্তির পরিমাণ দেখুন।' },
   zakat:    { en: 'Choose Gold or Silver Nisab standard.\nEnter the current price per gram, your cash, gold, silver, business assets, and any debts.\nPress Calculate to see if Zakat is due and how much.',
                bn: 'স্বর্ণ বা রৌপ্য নিসাব মান বেছে নিন।\nআজকের প্রতি গ্রাম দাম, নগদ, স্বর্ণ, রৌপ্য, ব্যবসায়িক সম্পদ ও ঋণ দিন।\nহিসাব চাপুন — যাকাত ফরজ কিনা ও কত তা দেখুন।' },
+  inheritance: { en: 'Select Muslim or Hindu law.\nEnter total property value and surviving family members (spouse, sons, daughters, parents).\nPress Calculate to see each heir\'s share per BD inheritance law.',
+               bn: 'মুসলিম বা হিন্দু আইন বেছে নিন।\nমোট সম্পত্তির মূল্য ও জীবিত পরিবারের সদস্য (স্ত্রী/স্বামী, ছেলে, মেয়ে, বাবা-মা) দিন।\nহিসাব চাপুন — প্রত্যেক ওয়ারিশের অংশ দেখুন।' },
   support:  { en: '', bn: '' },
 };
 
