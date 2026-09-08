@@ -3,7 +3,7 @@ import {
   FaCalculator, FaUniversity, FaBirthdayCake, FaWeight,
   FaFire, FaReceipt, FaChartLine, FaTshirt, FaRuler,
   FaExchangeAlt, FaRulerCombined, FaMapMarkedAlt,
-  FaBalanceScale, FaQuestionCircle, FaPiggyBank, FaMosque, FaGavel,
+  FaBalanceScale, FaQuestionCircle, FaPiggyBank, FaMosque, FaGavel, FaFileInvoiceDollar, FaBolt,
 } from 'react-icons/fa';
 
 import { LangProvider, useLang } from './context/LangContext.tsx';
@@ -31,7 +31,9 @@ import BdLandCalc     from './components/calculators/BdLandCalc.tsx';
 import BdWeightCalc   from './components/calculators/BdWeightCalc.tsx';
 import DepositCalc    from './components/calculators/DepositCalc.tsx';
 import ZakatCalc      from './components/calculators/ZakatCalc.tsx';
-import InheritanceCalc from './components/calculators/Inheritancecalc.tsx';
+import InheritanceCalc from './components/calculators/InheritanceCalc.tsx';
+import IncomeTaxCalc   from './components/calculators/Incometaxcalc.tsx';
+import UtilityCalc     from './components/calculators/Utilitycalc.tsx';
 
 const SCREENS: Record<string, React.ComponentType<any>> = {
   general:  GeneralCalc,
@@ -50,13 +52,15 @@ const SCREENS: Record<string, React.ComponentType<any>> = {
   deposit:  DepositCalc,
   zakat:    ZakatCalc,
   inheritance: InheritanceCalc,
+  incometax: IncomeTaxCalc,
+  utility:  UtilityCalc,
 };
 
 const ICONS: Record<string, React.ComponentType<{ size?: number; color?: string }>> = {
   FaCalculator, FaUniversity, FaBirthdayCake, FaWeight,
   FaFire, FaReceipt, FaChartLine, FaTshirt, FaRuler,
   FaExchangeAlt, FaRulerCombined, FaMapMarkedAlt, FaBalanceScale,
-  FaPiggyBank, FaMosque, FaGavel,
+  FaPiggyBank, FaMosque, FaGavel, FaFileInvoiceDollar, FaBolt,
 };
 
 const APP_LABELS: Record<string, { en: string; bn: string }> = {
@@ -76,6 +80,8 @@ const APP_LABELS: Record<string, { en: string; bn: string }> = {
   deposit:  { en: 'Deposit',      bn: 'ডিপোজিট' },
   zakat:    { en: 'Zakat',        bn: 'যাকাত' },
   inheritance: { en: 'Property Distribution', bn: 'সম্পত্তি বণ্টন' },
+  incometax: { en: 'Income Tax', bn: 'আয়কর' },
+  utility:  { en: 'Utility Bill', bn: 'ইউটিলিটি বিল' },
   support:  { en: 'Support',      bn: 'সাপোর্ট' },
 };
 
@@ -143,6 +149,10 @@ Enter value, select unit, press Convert.`,
                bn: 'স্বর্ণ বা রৌপ্য নিসাব মান বেছে নিন।\nআজকের প্রতি গ্রাম দাম, নগদ, স্বর্ণ, রৌপ্য, ব্যবসায়িক সম্পদ ও ঋণ দিন।\nহিসাব চাপুন — যাকাত ফরজ কিনা ও কত তা দেখুন।' },
   inheritance: { en: 'Select Muslim or Hindu law.\nEnter total property value and surviving family members (spouse, sons, daughters, parents).\nPress Calculate to see each heir\'s share per BD inheritance law.',
                bn: 'মুসলিম বা হিন্দু আইন বেছে নিন।\nমোট সম্পত্তির মূল্য ও জীবিত পরিবারের সদস্য (স্ত্রী/স্বামী, ছেলে, মেয়ে, বাবা-মা) দিন।\nহিসাব চাপুন — প্রত্যেক ওয়ারিশের অংশ দেখুন।' },
+  incometax: { en: 'Select your taxpayer category and enter annual taxable income.\nOptionally enter eligible investment for rebate.\nPress Calculate to see slab-wise tax and net payable amount.',
+               bn: 'করদাতার শ্রেণী বেছে নিন ও বার্ষিক করযোগ্য আয় দিন।\nরিবেটের জন্য যোগ্য বিনিয়োগ (ঐচ্ছিক) দিন।\nহিসাব চাপুন — স্ল্যাব অনুযায়ী কর ও প্রদেয় পরিমাণ দেখুন।' },
+  utility: { en: 'Choose Electricity, Gas, or Water.\nEnter units consumed (or burner type for gas).\nPress Calculate to see the estimated bill breakdown.',
+             bn: 'বিদ্যুৎ, গ্যাস বা পানি বেছে নিন।\nব্যবহৃত ইউনিট (বা গ্যাসের জন্য চুলার ধরন) দিন।\nহিসাব চাপুন — আনুমানিক বিলের বিবরণ দেখুন।' },
   support:  { en: '', bn: '' },
 };
 
