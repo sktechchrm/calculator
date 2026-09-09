@@ -55,9 +55,9 @@ export default function SupportScreen() {
         <div style={{ position:'absolute', top:-30, right:-20, width:120, height:120, background:'#c41e3a08', borderRadius:'50%' }}/>
         <div style={{ position:'absolute', bottom:-20, left:-10, width:80, height:80, background:'#d4a01708', borderRadius:'50%' }}/>
 
-        <div style={{ fontSize:36, marginBottom:10 }}>🍄</div>
+        <div style={{ fontSize:36, marginBottom:10 }}>🔢</div>
         <div style={{ fontFamily:"'Press Start 2P', monospace", color:'#e8e8e8', fontSize:11, letterSpacing:2, marginBottom:4 }}>
-          MARIO SMART CALCULATOR
+          {bn ? 'মারিও স্মার্ট ক্যালকুলেটর' : 'MARIO SMART CALCULATOR'}
         </div>
         <div style={{ fontSize:13, color:'#a8a4b8', fontWeight:500, marginBottom:16, lineHeight:1.5 }}>
           {bn ? 'প্রয়োজনীয় সব স্মার্ট ক্যালকুলেটর -একটি অ্যাপেই' : 'All required smart calculators -in one app'}
@@ -100,7 +100,7 @@ export default function SupportScreen() {
           {[
             { icon:<FaWhatsapp size={16} color="#25d366"/>, label:bn?'WhatsApp':'WhatsApp', val:'01732 484884', action:openWhatsApp },
             { icon:<FaMobileAlt size={16} color="#d4a017"/>, label:bn?'ফোন':'Phone', val:'01732 484884', action:()=>{ window.location.href='tel:+8801732484884'; } },
-            { icon:<FaGlobe size={16} color="#8e44ad"/>, label:bn?'ডেভেলপার':'Developer', val:'Saiful Islam', action:undefined },
+            { icon:<FaGlobe size={16} color="#8e44ad"/>, label:bn?'ডেভেলপার':'Developer', val:'Saiful Islam Sumir', action:undefined },
             { icon:<FaShieldAlt size={16} color="#27ae60"/>, label:bn?'সংস্করণ':'Version', val:'v2.0.0', action:undefined },
           ].map((item,i) => (
             <div key={i} onClick={item.action}
@@ -121,7 +121,7 @@ export default function SupportScreen() {
         </div>
 
         {/* App objectives */}
-        <div style={{ fontSize:11, fontWeight:800, color:'#a8a4b8', letterSpacing:0.8, textTransform:'uppercase', marginBottom:12 }}>
+        {/* <div style={{ fontSize:11, fontWeight:800, color:'#a8a4b8', letterSpacing:0.8, textTransform:'uppercase', marginBottom:12 }}>
           {bn ? 'অ্যাপের উদ্দেশ্য' : 'App Objectives'}
         </div>
         <div style={{ display:'flex', flexDirection:'column', gap:8, marginBottom:20 }}>
@@ -139,7 +139,7 @@ export default function SupportScreen() {
               </div>
             </div>
           ))}
-        </div>
+        </div> */}
 
         {/* App features */}
         <div style={{ fontSize:11, fontWeight:800, color:'#a8a4b8', letterSpacing:0.8, textTransform:'uppercase', marginBottom:12 }}>

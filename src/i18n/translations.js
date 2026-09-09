@@ -1,7 +1,7 @@
 export const translations = {
   bn: {
-    appName: 'মারিও ক্যালকুলেটর',
-    tagline: '১৩টি স্মার্ট হিসাব — একটি অ্যাপ',
+    appName: 'মারিও স্মার্ট ক্যালকুলেটর',
+    tagline: 'একটি অ্যাপেই সব স্মার্ট ক্যালকুলেটর',
     selectCalc: 'ক্যালকুলেটর বেছে নিন',
     calculate: 'হিসাব করুন',
     save: 'সংরক্ষণ',
@@ -215,8 +215,8 @@ export const translations = {
     },
   },
   en: {
-    appName: 'Mario Calculator',
-    tagline: '13 Smart Calculators in One App',
+    appName: 'Mario Smart Calculator',
+    tagline: 'All Smart Calculators in One App',
     selectCalc: 'Select a Calculator',
     calculate: 'Calculate',
     save: 'Save',

@@ -153,7 +153,7 @@ export default function Header({ onBack, title, accent, icon: Icon, info }: Prop
         </div>
       )}
 
-      {/* Theme toggle â€” day/night */}
+      {/* Theme toggle day/night */}
       <button
         onClick={toggleTheme}
         title={isDark ? 'Switch to Day mode' : 'Switch to Night mode'}
@@ -175,14 +175,15 @@ export default function Header({ onBack, title, accent, icon: Icon, info }: Prop
         onClick={toggle}
         style={{
           ...btnBase,
-          borderRadius: 20, padding: '5px 11px',
-          fontSize: 11, fontWeight: 700, color: 'var(--text2)',
-          gap: 4,
+          width: 34, height: 34, borderRadius: 11,
+          color: isDark ? '#f59e0b' : '#7c3aed',
+          border: `1px solid ${isDark ? '#f59e0b40' : '#7c3aed40'}`,
+          background: isDark ? '#1a1500' : '#f0eeff',
         }}
         onTouchStart={e => (e.currentTarget.style.background = 'var(--surface2)')}
         onTouchEnd={e => { e.currentTarget.style.background = 'var(--surface)'; }}
       >
-        <FaGlobe size={10} />{lang === 'bn' ? 'EN' : 'বাং'}
+        {lang === 'bn' ? 'EN' : 'বাং'}
       </button>
     </div>
   );

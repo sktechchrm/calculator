@@ -205,13 +205,13 @@ export default function HomeScreen({ onOpen, history }: Props) {
           <span style={{
             fontSize: 'clamp(18px,3vw,26px)', lineHeight: 1, flexShrink: 0,
             display: 'inline-block', animation: '_bob 3s ease-in-out infinite',
-          }}>🍄</span>
+          }}>🧮</span>
           <div>
             <h1 style={{
               fontFamily: T.fontMono, margin: 0,
               fontSize: 'clamp(10px,1.8vw,14px)', fontWeight: 700,
               letterSpacing: 'clamp(1px,.3vw,2.5px)', color: T.textPri, lineHeight: 1.25,
-            }}>MARIO SMART CALCULATOR</h1>
+            }}>{t.appName}</h1>
             <p style={{
               fontSize: 'clamp(9px,1.2vw,11px)', color: T.textSec,
               marginTop: 3, lineHeight: 1, fontFamily: T.font,

@@ -31,7 +31,7 @@ import BdLandCalc     from './components/calculators/BdLandCalc.tsx';
 import BdWeightCalc   from './components/calculators/BdWeightCalc.tsx';
 import DepositCalc    from './components/calculators/DepositCalc.tsx';
 import ZakatCalc      from './components/calculators/ZakatCalc.tsx';
-import InheritanceCalc from './components/calculators/InheritanceCalc.tsx';
+import InheritanceCalc from './components/calculators/Inheritancecalc.tsx';
 import IncomeTaxCalc   from './components/calculators/Incometaxcalc.tsx';
 import UtilityCalc     from './components/calculators/Utilitycalc.tsx';
 

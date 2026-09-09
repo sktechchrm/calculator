@@ -13,9 +13,7 @@ export interface CalcProps {
 export const APPS: AppDef[] = [
   { id: 'general',   icon: 'FaCalculator',    color: '#e8e8e8', light: '#1e1e22', shadow: '#e8e8e820' },
   { id: 'emi',       icon: 'FaUniversity',    color: '#d4a017', light: '#1e1a0e', shadow: '#d4a01720' },
-  { id: 'age',       icon: 'FaBirthdayCake',  color: '#c41e3a', light: '#1e0a0f', shadow: '#c41e3a20' },
-  { id: 'bmi',       icon: 'FaWeight',        color: '#e67e22', light: '#1e1108', shadow: '#e67e2220' },
-  { id: 'calorie',   icon: 'FaFire',          color: '#e74c3c', light: '#1e0808', shadow: '#e74c3c20' },
+  { id: 'deposit',   icon: 'FaLandmark',      color: '#0e9594', light: '#071616', shadow: '#0e959420' },
   { id: 'vat',       icon: 'FaReceipt',       color: '#9b59b6', light: '#160e1a', shadow: '#9b59b620' },
   //{ id: 'smv',       icon: 'FaChartLine',     color: '#27ae60', light: '#081a0e', shadow: '#27ae6020' },
   //{ id: 'garments',  icon: 'FaTshirt',        color: '#e67e22', light: '#1e1108', shadow: '#e67e2220' },
@@ -24,9 +22,11 @@ export const APPS: AppDef[] = [
   { id: 'unit',      icon: 'FaExchangeAlt',   color: '#8e44ad', light: '#140e1a', shadow: '#8e44ad20' },
   { id: 'bdland',    icon: 'FaMapMarkedAlt',  color: '#16a085', light: '#081612', shadow: '#16a08520' },
   { id: 'bdweight',  icon: 'FaBalanceScale',  color: '#c41e3a', light: '#1e0a0f', shadow: '#c41e3a20' },
-  { id: 'deposit',   icon: 'FaLandmark',      color: '#0e9594', light: '#071616', shadow: '#0e959420' },
   { id: 'zakat',     icon: 'FaMosque',        color: '#2f9e44', light: '#0a170c', shadow: '#2f9e4420' },
   { id: 'inheritance', icon: 'FaGavel',       color: '#6c5ce7', light: '#0f0c1c', shadow: '#6c5ce720' },
   { id: 'incometax', icon: 'FaFileInvoiceDollar', color: '#2980b9', light: '#0a151c', shadow: '#2980b920' },
   { id: 'utility',   icon: 'FaBolt',           color: '#f1c40f', light: '#1c1a08', shadow: '#f1c40f20' },
+  { id: 'age',       icon: 'FaBirthdayCake',  color: '#c41e3a', light: '#1e0a0f', shadow: '#c41e3a20' },
+  { id: 'bmi',       icon: 'FaWeight',        color: '#e67e22', light: '#1e1108', shadow: '#e67e2220' },
+  { id: 'calorie',   icon: 'FaFire',          color: '#e74c3c', light: '#1e0808', shadow: '#e74c3c20' },
 ];

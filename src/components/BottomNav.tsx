@@ -13,7 +13,7 @@ interface Tab {
 const TABS: Tab[] = [
   { id:'home',     icon:FaHome,           bn:'হোম',     en:'Home',     apps:[],                                   primary:'',        color:'#e8e8e8' },
   { id:'calc',     icon:FaCalculator,     bn:'হিসাব',   en:'Calc',     apps:['general'],                          primary:'general', color:'#ff9f0a' },
-  { id:'garments', icon:FaTshirt,         bn:'পোশাক',   en:'Garments', apps:['garments','gpattern','gsize'],      primary:'garments',color:'#e67e22' },
+  //{ id:'garments', icon:FaTshirt,         bn:'পোশাক',   en:'Garments', apps:['garments','gpattern','gsize'],      primary:'garments',color:'#e67e22' },
   { id:'finance',  icon:FaMoneyBillWave,  bn:'আর্থিক',  en:'Finance',  apps:['emi','vat','smv','bdweight','bdland','unit','bmi','calorie','age'], primary:'emi', color:'#d4a017' },
   { id:'support',  icon:FaQuestionCircle, bn:'সাপোর্ট', en:'Support',  apps:['support'],                          primary:'support', color:'#c41e3a' },
 ];
