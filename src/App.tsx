@@ -3,7 +3,7 @@ import {
   FaCalculator, FaUniversity, FaBirthdayCake, FaWeight,
   FaFire, FaReceipt, FaChartLine, FaTshirt, FaRuler,
   FaExchangeAlt, FaRulerCombined, FaMapMarkedAlt,
-  FaBalanceScale, FaQuestionCircle, FaPiggyBank, FaMosque, FaGavel, FaFileInvoiceDollar, FaBolt,
+  FaBalanceScale, FaQuestionCircle, FaPiggyBank, FaMosque, FaGavel, FaFileInvoiceDollar, FaBolt, FaBaby,
 } from 'react-icons/fa';
 
 import { LangProvider, useLang } from './context/LangContext.tsx';
@@ -34,6 +34,7 @@ import ZakatCalc      from './components/calculators/ZakatCalc.tsx';
 import InheritanceCalc from './components/calculators/Inheritancecalc.tsx';
 import IncomeTaxCalc   from './components/calculators/Incometaxcalc.tsx';
 import UtilityCalc     from './components/calculators/Utilitycalc.tsx';
+import MaternityCalc  from './components/calculators/MaternityCalc.tsx';
 
 const SCREENS: Record<string, React.ComponentType<any>> = {
   general:  GeneralCalc,
@@ -54,13 +55,14 @@ const SCREENS: Record<string, React.ComponentType<any>> = {
   inheritance: InheritanceCalc,
   incometax: IncomeTaxCalc,
   utility:  UtilityCalc,
+  maternity: MaternityCalc,
 };
 
 const ICONS: Record<string, React.ComponentType<{ size?: number; color?: string }>> = {
   FaCalculator, FaUniversity, FaBirthdayCake, FaWeight,
   FaFire, FaReceipt, FaChartLine, FaTshirt, FaRuler,
   FaExchangeAlt, FaRulerCombined, FaMapMarkedAlt, FaBalanceScale,
-  FaPiggyBank, FaMosque, FaGavel, FaFileInvoiceDollar, FaBolt,
+  FaPiggyBank, FaMosque, FaGavel, FaFileInvoiceDollar, FaBolt, FaBaby,
 };
 
 const APP_LABELS: Record<string, { en: string; bn: string }> = {
@@ -82,6 +84,7 @@ const APP_LABELS: Record<string, { en: string; bn: string }> = {
   inheritance: { en: 'Property Distribution', bn: 'সম্পত্তি বণ্টন' },
   incometax: { en: 'Income Tax', bn: 'আয়কর' },
   utility:  { en: 'Utility Bill', bn: 'ইউটিলিটি বিল' },
+  maternity: { en: 'Maternity Benefit', bn: 'মাতৃত্ব সুবিধা' },
   support:  { en: 'Support',      bn: 'সাপোর্ট' },
 };
 
@@ -153,6 +156,8 @@ Enter value, select unit, press Convert.`,
                bn: 'করদাতার শ্রেণী বেছে নিন ও বার্ষিক করযোগ্য আয় দিন।\nরিবেটের জন্য যোগ্য বিনিয়োগ (ঐচ্ছিক) দিন।\nহিসাব চাপুন — স্ল্যাব অনুযায়ী কর ও প্রদেয় পরিমাণ দেখুন।' },
   utility: { en: 'Choose Electricity, Gas, or Water.\nEnter units consumed (or burner type for gas).\nPress Calculate to see the estimated bill breakdown.',
              bn: 'বিদ্যুৎ, গ্যাস বা পানি বেছে নিন।\nব্যবহৃত ইউনিট (বা গ্যাসের জন্য চুলার ধরন) দিন।\nহিসাব চাপুন — আনুমানিক বিলের বিবরণ দেখুন।' },
+  maternity: { en: 'Enter your joining date and delivery date (day / month / year).\nEnter monthly wage and number of surviving children.\nPress Calculate to see leave schedule and benefit amount per BD Labour Act, Sec 46.',
+               bn: 'যোগদানের তারিখ ও প্রসবের তারিখ দিন (দিন / মাস / বছর)।\nমাসিক মজুরি ও জীবিত সন্তানের সংখ্যা দিন।\nহিসাব চাপুন — শ্রম আইন ধারা ৪৬ অনুযায়ী ছুটির সময়সূচি ও সুবিধা দেখুন।' },
   support:  { en: '', bn: '' },
 };
 

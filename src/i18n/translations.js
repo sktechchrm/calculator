@@ -41,6 +41,7 @@ export const translations = {
       inheritance: { label: 'সম্পত্তি বণ্টন', desc: 'ওয়ারিশ অনুযায়ী ভাগ' },
       incometax: { label: 'আয়কর', desc: 'আয়কর হিসাব' },
       utility:  { label: 'ইউটিলিটি বিল', desc: 'বিদ্যুৎ/গ্যাস/পানি' },
+      maternity:{ label: 'মাতৃত্ব সুবিধা',  desc: 'শ্রম আইন অনুযায়ী হিসাব' },
     },
     deposit: {
       fdr: 'এফডিআর', dps: 'ডিপিএস',
@@ -256,6 +257,7 @@ export const translations = {
       inheritance: { label: 'Property Distribution', desc: 'Inheritance Split' },
       incometax: { label: 'Income Tax',   desc: 'NBR Tax Slabs' },
       utility:  { label: 'Utility Bill', desc: 'Electricity/Gas/Water' },
+      maternity:{ label: 'Maternity Benefit', desc: 'Labour Law Calculation' },
     },
     deposit: {
       fdr: 'FDR', dps: 'DPS',

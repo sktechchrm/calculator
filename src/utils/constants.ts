@@ -29,4 +29,5 @@ export const APPS: AppDef[] = [
   { id: 'age',       icon: 'FaBirthdayCake',  color: '#c41e3a', light: '#1e0a0f', shadow: '#c41e3a20' },
   { id: 'bmi',       icon: 'FaWeight',        color: '#e67e22', light: '#1e1108', shadow: '#e67e2220' },
   { id: 'calorie',   icon: 'FaFire',          color: '#e74c3c', light: '#1e0808', shadow: '#e74c3c20' },
+  { id: 'maternity', icon: 'FaBaby',          color: '#ec4899', light: '#1e0814', shadow: '#ec489920' },
 ];
