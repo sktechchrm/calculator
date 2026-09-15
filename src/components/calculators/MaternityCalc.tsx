@@ -242,16 +242,16 @@ export default function MaternityCalc({ history, onAdd, onClear }: CalcProps) {
     onAdd('maternity', `${bn ? 'মোট সুবিধা' : 'Total benefit'}: ৳${totalBenefit.toFixed(0)}, ${totalDays} ${bn ? 'দিন' : 'days'}`);
   };
 
+  const FN = (n: number) => '৳' + Math.round(n).toLocaleString('en-BD');
+
   const share = result?.eligible
     ? buildShare(bn ? 'মাতৃত্বকালীন সুবিধা' : 'Maternity Benefit', [
-        `${bn ? 'মোট ছুটি' : 'Total leave'}: ${result.totalDays} ${bn ? 'দিন' : 'days'}`,
-        `${bn ? 'ছুটি শুরু' : 'Leave start'}: ${formatDate(result.leaveStart, bn)}`,
-        `${bn ? 'ছুটি শেষ' : 'Leave end'}: ${formatDate(result.leaveEnd, bn)}`,
-        `${bn ? 'মোট সুবিধা' : 'Total benefit'}: ৳${result.totalBenefit.toFixed(0)}`,
+        `${bn ? 'প্রথম কিস্তি' : '1st installment'}: ${FN(result.preWage)}`,
+        `${bn ? 'দ্বিতীয় কিস্তি' : '2nd installment'}: ${FN(result.postWage)}`,
+        `${bn ? 'মোট টাকা' : 'Total Taka'}: ${FN(result.totalBenefit)}`,
+        `${bn ? 'মোট ছুটি' : 'Total Leave'}: ${result.totalDays} ${bn ? 'দিন' : 'days'}`,
       ])
     : null;
-
-  const FN = (n: number) => '৳' + Math.round(n).toLocaleString('en-BD');
 
   return (
     <CalcShell
@@ -278,13 +278,13 @@ export default function MaternityCalc({ history, onAdd, onClear }: CalcProps) {
                     <>
                     <strong>বাংলাদেশ শ্রম আইন ২০০৬ — অধ্যায় ৪ (ধারা ৪৬)</strong><br />
                     <strong>প্রসূতি কল্যাণ সুবিধা:</strong> প্রসবের পূর্বে ৬০ দিন ও পরে ৬০ দিন (মোট ১২০ দিন) সুবিধা প্রদেয়।<br />
-                    <strong>শর্তাবলী:</strong> (১) প্রসবের পূর্বে নুন্যতম ৬ মাস ধারাবাহিক চাকরি সম্পন্ন হতে হবে। (২) ২টির বেশি সন্তান জীবিত থাকলে এই সুবিধা প্রযোজ্য নয় (তবে সাধারণ ছুটি পাবেন)।
+                    <strong>শর্তাবলী:</strong> (১) প্রসবের পূর্বে নুন্যতম ৬ মাস ধারাবাহিক চাকরি সম্পন্ন হতে হবে। (২) ২টির বেশি সন্তান জীবিত থাকলে এই সুবিধা প্রযোজ্য নয় (কোন ছুটি পাইবার অধিকারী হইলে তাহা পাইবেন)।
                     </>
                 ) : (
                     <>
                     <strong>Bangladesh Labour Act 2006 — Chapter IV (Sec 46)</strong><br />
                     <strong>Maternity Benefit:</strong> Entitled to 60 days pre-delivery and 60 days post-delivery benefit.<br />
-                    <strong>Conditions:</strong> (1) Requires min. 6 months service before delivery. (2) Not applicable if 2 or more children survive (standard leave applies).
+                    <strong>Conditions:</strong> (1) Requires min. 6 months service before delivery. (2) Not applicable if 2 or more children survive (If entitled to any leave, you will receive it.).
                     </>
                 )}
             </div>
@@ -414,8 +414,8 @@ export default function MaternityCalc({ history, onAdd, onClear }: CalcProps) {
             <StatGrid
               items={[
                 [bn ? 'দৈনিক মজুরি'     : 'Daily wage',        `৳${result.avgDailyWage.toFixed(2)}`,   A],
-                [bn ? 'প্রসব পূর্ববর্তী' : 'Pre-delivery',      FN(result.preWage),                     '#3b82f6'],
-                [bn ? 'প্রসব পরবর্তী'   : 'Post-delivery',     FN(result.postWage),                    '#10b981'],
+                [bn ? 'প্রথম কিস্তি' : 'First installment',      FN(result.preWage),                     '#3b82f6'],
+                [bn ? 'দ্বিতীয় কিস্তি'   : 'Second installment',     FN(result.postWage),                    '#10b981'],
                 [bn ? 'মোট ছুটি'         : 'Total leave',       `${result.totalDays} ${bn ? 'দিন' : 'days'}`, A],
               ]}
               cols={2}
@@ -423,7 +423,7 @@ export default function MaternityCalc({ history, onAdd, onClear }: CalcProps) {
           </ResultCard>
 
           {/* Leave timeline */}
-          <div style={{
+          {/* <div style={{
             marginTop: 14, background: 'var(--surface)',
             border: `1px solid var(--border)`, borderRadius: 14,
             overflow: 'hidden',
@@ -440,7 +440,7 @@ export default function MaternityCalc({ history, onAdd, onClear }: CalcProps) {
             {[
               {
                 icon: '🔵',
-                label: bn ? `প্রসব পূর্ববর্তী ছুটি শুরু (${result.preDays} দিন)` : `Pre-delivery leave starts (${result.preDays} days)`,
+                label: bn ? `প্রথম কিস্তি শুরু (${result.preDays} দিন)` : `First installment starts (${result.preDays} days)`,
                 date: result.leaveStart,
                 color: '#3b82f6',
               },
@@ -473,10 +473,10 @@ export default function MaternityCalc({ history, onAdd, onClear }: CalcProps) {
                 </div>
               </div>
             ))}
-          </div>
+          </div> */}
 
           {/* Payment rules */}
-          <div style={{
+          {/* <div style={{
             marginTop: 14, background: 'var(--surface)',
             border: `1px solid var(--border)`, borderRadius: 14,
             overflow: 'hidden',
@@ -536,23 +536,23 @@ export default function MaternityCalc({ history, onAdd, onClear }: CalcProps) {
                 ? 'প্রসবের ৩ মাসের মধ্যে প্রমাণ দাখিল না করলে সুবিধা পাওয়া যাবে না। (ধারা ৪৭-৪)'
                 : 'Proof of birth must be submitted within 3 months of delivery. (Sec 47-4)'}
             </div>
-          </div>
+          </div> */}
 
           {/* Termination protection */}
-          <div style={{
+            <div style={{
             marginTop: 14, background: '#1a0a05',
             border: '1px solid #7c2d12', borderRadius: 12,
             padding: '12px 14px',
-          }}>
+            }}>
             <div style={{ fontWeight: 700, fontSize: 12, color: '#fb923c', marginBottom: 6 }}>
-              🛡️ {bn ? 'চাকরি সুরক্ষা (ধারা ৫০)' : 'Job Protection (Sec 50)'}
+                🛡️ {bn ? 'চাকরি সুরক্ষা (ধারা ৫০)' : 'Job Protection (Sec 50)'}
             </div>
-            <div style={{ fontSize: 12, color: '#fed7aa', lineHeight: 1.7 }}>
-              {bn
-                ? 'প্রসবের ৬ মাস আগে থেকে এবং ৮ সপ্তাহ পরে পর্যন্ত — যথাযথ কারণ ছাড়া ছাঁটাই, বরখাস্ত বা চাকরি থেকে অপসারণ করা হলে — নিয়োগকর্তা মাতৃত্বকালীন সুবিধা থেকে বঞ্চিত করতে পারবেন না।'
-                : 'During 6 months before delivery and 8 weeks after — if employer discharges, dismisses or removes the worker without sufficient cause — she remains entitled to full maternity benefit.'}
+            <div style={{ fontSize: 12, color: '#fed7aa', lineHeight: 1.6 }}>
+                {bn
+                ? 'প্রসবের পূর্ববর্তী ৬ মাস ও পরবর্তী ৬০ দিনের মধ্যে যুক্তিসংগত কারণ ছাড়া ডিসচার্জ, বরখাস্ত বা অপসারণ অথবা চাকুরী অন্যভাবে অবসানের কোন নোটিশ বা আদেশ প্রদান করা হলেও প্রসূতি কল্যাণ সুবিধা প্রদান বাধ্যতামূলক।'
+                : 'Payment of maternity benefits is mandatory even if a notice or order of discharge, dismissal, removal, or termination of employment by any other means is issued—without reasonable cause—during the six months preceding childbirth or the sixty days following it.'}
             </div>
-          </div>
+            </div>
         </>
       )}
     </CalcShell>
