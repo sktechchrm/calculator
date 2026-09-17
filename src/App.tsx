@@ -3,7 +3,7 @@ import {
   FaCalculator, FaUniversity, FaBirthdayCake, FaWeight,
   FaFire, FaReceipt, FaChartLine, FaTshirt, FaRuler,
   FaExchangeAlt, FaRulerCombined, FaMapMarkedAlt,
-  FaBalanceScale, FaQuestionCircle, FaPiggyBank, FaMosque, FaGavel, FaFileInvoiceDollar, FaBolt, FaBaby,
+  FaBalanceScale, FaQuestionCircle, FaPiggyBank, FaMosque, FaGavel, FaFileInvoiceDollar, FaBolt, FaBaby, FaFileContract,
 } from 'react-icons/fa';
 
 import { LangProvider, useLang } from './context/LangContext.tsx';
@@ -35,6 +35,7 @@ import InheritanceCalc from './components/calculators/Inheritancecalc.tsx';
 import IncomeTaxCalc   from './components/calculators/Incometaxcalc.tsx';
 import UtilityCalc     from './components/calculators/Utilitycalc.tsx';
 import MaternityCalc  from './components/calculators/MaternityCalc.tsx';
+import FinalSettlementCalc from './components/calculators/FinalSettlementCalc.tsx';
 
 const SCREENS: Record<string, React.ComponentType<any>> = {
   general:  GeneralCalc,
@@ -56,13 +57,14 @@ const SCREENS: Record<string, React.ComponentType<any>> = {
   incometax: IncomeTaxCalc,
   utility:  UtilityCalc,
   maternity: MaternityCalc,
+  finalsettlement: FinalSettlementCalc,
 };
 
 const ICONS: Record<string, React.ComponentType<{ size?: number; color?: string }>> = {
   FaCalculator, FaUniversity, FaBirthdayCake, FaWeight,
   FaFire, FaReceipt, FaChartLine, FaTshirt, FaRuler,
   FaExchangeAlt, FaRulerCombined, FaMapMarkedAlt, FaBalanceScale,
-  FaPiggyBank, FaMosque, FaGavel, FaFileInvoiceDollar, FaBolt, FaBaby,
+  FaPiggyBank, FaMosque, FaGavel, FaFileInvoiceDollar, FaBolt, FaBaby, FaFileContract,
 };
 
 const APP_LABELS: Record<string, { en: string; bn: string }> = {
@@ -85,6 +87,7 @@ const APP_LABELS: Record<string, { en: string; bn: string }> = {
   incometax: { en: 'Income Tax', bn: 'আয়কর' },
   utility:  { en: 'Utility Bill', bn: 'ইউটিলিটি বিল' },
   maternity: { en: 'Maternity Benefit', bn: 'মাতৃত্ব সুবিধা' },
+  finalsettlement: { en: 'Final Settlement', bn: 'চূড়ান্ত পাওনা' },
   support:  { en: 'Support',      bn: 'সাপোর্ট' },
 };
 
@@ -158,6 +161,8 @@ Enter value, select unit, press Convert.`,
              bn: 'বিদ্যুৎ, গ্যাস বা পানি বেছে নিন।\nব্যবহৃত ইউনিট (বা গ্যাসের জন্য চুলার ধরন) দিন।\nহিসাব চাপুন — আনুমানিক বিলের বিবরণ দেখুন।' },
   maternity: { en: 'Enter your joining date and delivery date (day / month / year).\nEnter monthly wage and number of surviving children.\nPress Calculate to see leave schedule and benefit amount per BD Labour Act, Sec 46.',
                bn: 'যোগদানের তারিখ ও প্রসবের তারিখ দিন (দিন / মাস / বছর)।\nমাসিক মজুরি ও জীবিত সন্তানের সংখ্যা দিন।\nহিসাব চাপুন — শ্রম আইন ধারা ৪৬ অনুযায়ী ছুটির সময়সূচি ও সুবিধা দেখুন।' },
+  finalsettlement: { en: 'Enter joining and last attendance dates, and select the type of separation.\nEnter monthly wage, earned leave, and any notice/lay-off days that apply.\nPress Calculate to see the full receivable, deductions, and net payable breakdown.',
+               bn: 'যোগদান ও সর্বশেষ উপস্থিতির তারিখ দিন এবং নিষ্পত্তির ধরন বেছে নিন।\nমাসিক মজুরি, অর্জিত ছুটি এবং প্রযোজ্য নোটিশ/লে-অফের দিন দিন।\nহিসাব চাপুন — মোট প্রাপ্য, কর্তন ও নিট প্রদেয়ের সম্পূর্ণ বিবরণ দেখুন।' },
   support:  { en: '', bn: '' },
 };
 
