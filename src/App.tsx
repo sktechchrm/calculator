@@ -3,7 +3,7 @@ import {
   FaCalculator, FaUniversity, FaBirthdayCake, FaWeight,
   FaFire, FaReceipt, FaChartLine, FaTshirt, FaRuler,
   FaExchangeAlt, FaRulerCombined, FaMapMarkedAlt,
-  FaBalanceScale, FaQuestionCircle, FaPiggyBank, FaMosque, FaGavel, FaFileInvoiceDollar, FaBolt, FaBaby, FaFileContract,
+  FaBalanceScale, FaQuestionCircle, FaPiggyBank, FaMosque, FaGavel, FaFileInvoiceDollar, FaBolt, FaBaby, FaFileContract, FaVideo,
 } from 'react-icons/fa';
 
 import { LangProvider, useLang } from './context/LangContext.tsx';
@@ -15,6 +15,7 @@ import HomeScreen from './components/HomeScreen.tsx';
 import Header     from './components/Header.tsx';
 import BottomNav  from './components/BottomNav.tsx';
 import SupportScreen from './components/SupportScreen.tsx';
+import CallScreen  from './components/CallScreen.tsx';
 
 import GeneralCalc    from './components/calculators/GeneralCalc.tsx';
 import EmiCalc        from './components/calculators/EmiCalc.tsx';
@@ -58,13 +59,16 @@ const SCREENS: Record<string, React.ComponentType<any>> = {
   utility:  UtilityCalc,
   maternity: MaternityCalc,
   finalsettlement: FinalSettlementCalc,
+  // 'call' is NOT registered here — it doesn't take CalcProps (no
+  // history/onAdd/onClear), so it's special-cased in AppInner below,
+  // the same way 'support' is.
 };
 
 const ICONS: Record<string, React.ComponentType<{ size?: number; color?: string }>> = {
   FaCalculator, FaUniversity, FaBirthdayCake, FaWeight,
   FaFire, FaReceipt, FaChartLine, FaTshirt, FaRuler,
   FaExchangeAlt, FaRulerCombined, FaMapMarkedAlt, FaBalanceScale,
-  FaPiggyBank, FaMosque, FaGavel, FaFileInvoiceDollar, FaBolt, FaBaby, FaFileContract,
+  FaPiggyBank, FaMosque, FaGavel, FaFileInvoiceDollar, FaBolt, FaBaby, FaFileContract, FaVideo,
 };
 
 const APP_LABELS: Record<string, { en: string; bn: string }> = {
@@ -88,6 +92,7 @@ const APP_LABELS: Record<string, { en: string; bn: string }> = {
   utility:  { en: 'Utility Bill', bn: 'ইউটিলিটি বিল' },
   maternity: { en: 'Maternity Benefit', bn: 'মাতৃত্ব সুবিধা' },
   finalsettlement: { en: 'Final Settlement', bn: 'চূড়ান্ত পাওনা' },
+  call:     { en: 'Video Call',   bn: 'ভিডিও কল' },
   support:  { en: 'Support',      bn: 'সাপোর্ট' },
 };
 
@@ -163,6 +168,8 @@ Enter value, select unit, press Convert.`,
                bn: 'যোগদানের তারিখ ও প্রসবের তারিখ দিন (দিন / মাস / বছর)।\nমাসিক মজুরি ও জীবিত সন্তানের সংখ্যা দিন।\nহিসাব চাপুন — শ্রম আইন ধারা ৪৬ অনুযায়ী ছুটির সময়সূচি ও সুবিধা দেখুন।' },
   finalsettlement: { en: 'Enter joining and last attendance dates, and select the type of separation.\nEnter monthly wage, earned leave, and any notice/lay-off days that apply.\nPress Calculate to see the full receivable, deductions, and net payable breakdown.',
                bn: 'যোগদান ও সর্বশেষ উপস্থিতির তারিখ দিন এবং নিষ্পত্তির ধরন বেছে নিন।\nমাসিক মজুরি, অর্জিত ছুটি এবং প্রযোজ্য নোটিশ/লে-অফের দিন দিন।\nহিসাব চাপুন — মোট প্রাপ্য, কর্তন ও নিট প্রদেয়ের সম্পূর্ণ বিবরণ দেখুন।' },
+  call:     { en: 'Tap Start call to get a link, and send it to the other person any way you like.\nOr open a link someone sent you to answer.\nWorks browser to browser — no account needed.',
+               bn: 'কল শুরু করুন চাপুন, একটি লিংক পাবেন — যেকোনো মাধ্যমে অন্য ব্যক্তিকে পাঠান।\nঅথবা কেউ পাঠানো লিংক খুলে উত্তর দিন।\nব্রাউজার টু ব্রাউজার কাজ করে — কোনো অ্যাকাউন্ট প্রয়োজন নেই।' },
   support:  { en: '', bn: '' },
 };
 
@@ -176,7 +183,7 @@ function AppInner() {
   const handleHome  = useCallback(() => setActiveId(null), []);
 
   const activeApp   = activeId ? APPS.find(a => a.id === activeId) : null;
-  const Screen      = activeId && activeId !== 'support' ? SCREENS[activeId] : null;
+  const Screen      = activeId && activeId !== 'support' && activeId !== 'call' ? SCREENS[activeId] : null;
   const ActiveIcon  = activeApp ? ICONS[activeApp.icon] : activeId === 'support' ? FaQuestionCircle : null;
   const activeLabel = activeId ? (APP_LABELS[activeId]?.[lang] || activeId) : '';
   const activeColor = activeApp?.color || (activeId === 'support' ? '#c41e3a' : '#e8e8e8');
@@ -209,6 +216,10 @@ function AppInner() {
             {activeId === 'support' ? (
               <div style={{ flex: 1, minHeight: 0, overflowY: 'auto' }}>
                 <SupportScreen />
+              </div>
+            ) : activeId === 'call' ? (
+              <div style={{ flex: 1, minHeight: 0, overflow: 'hidden' }}>
+                <CallScreen />
               </div>
             ) : Screen ? (
               isGeneral ? (

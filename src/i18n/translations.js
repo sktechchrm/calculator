@@ -43,6 +43,7 @@ export const translations = {
       utility:  { label: 'ইউটিলিটি বিল', desc: 'বিদ্যুৎ/গ্যাস/পানি' },
       maternity:{ label: 'মাতৃত্ব সুবিধা',  desc: 'শ্রম আইন অনুযায়ী হিসাব' },
       finalsettlement: { label: 'চূড়ান্ত পাওনা',  desc: 'নিষ্পত্তি ও ক্ষতিপূরণ' },
+      call:     { label: 'ভিডিও কল',    desc: 'ব্রাউজার টু ব্রাউজার' },
     },
     deposit: {
       fdr: 'এফডিআর', dps: 'ডিপিএস',
@@ -260,6 +261,7 @@ export const translations = {
       utility:  { label: 'Utility Bill', desc: 'Electricity/Gas/Water' },
       maternity:{ label: 'Maternity Benefit', desc: 'Labour Law Calculation' },
       finalsettlement: { label: 'Final Settlement', desc: 'Separation & Compensation' },
+      call:     { label: 'Video Call',   desc: 'Browser to browser' },
     },
     deposit: {
       fdr: 'FDR', dps: 'DPS',
