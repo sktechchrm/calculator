@@ -31,5 +31,5 @@ export const APPS: AppDef[] = [
   { id: 'calorie',   icon: 'FaFire',          color: '#e74c3c', light: '#1e0808', shadow: '#e74c3c20' },
   { id: 'maternity', icon: 'FaBaby',          color: '#ec4899', light: '#1e0814', shadow: '#ec489920' },
   { id: 'finalsettlement', icon: 'FaFileContract', color: '#0d9488', light: '#071615', shadow: '#0d948820' },
-  { id: 'call',      icon: 'FaVideo',         color: '#06b6d4', light: '#04181c', shadow: '#06b6d420' },
+  // { id: 'call',      icon: 'FaVideo',         color: '#06b6d4', light: '#04181c', shadow: '#06b6d420' },
 ];
