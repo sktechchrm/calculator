@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Relay — Direct Call</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  :root{
+    --bg:#0a0e13; --surface:#121821; --surface2:#1a2230; --border:#242e3d;
+    --text:#eef3f4; --text2:#a8b6c2; --text3:#6b7d8c;
+    --mint:#34d8a6; --mint-dim:#1f8f6e; --coral:#ff5470; --amber:#f2b84b;
+    --ring: rgba(52,216,166,.35);
+  }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --bg:#f4f6f8; --surface:#ffffff; --surface2:#eef1f4; --border:#dfe4ea;
+      --text:#141b22; --text2:#4d5a66; --text3:#8592a0;
+    }
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f6f8; --surface:#ffffff; --surface2:#eef1f4; --border:#dfe4ea;
+    --text:#141b22; --text2:#4d5a66; --text3:#8592a0;
+  }
+
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:'Inter',system-ui,sans-serif;
+    overflow:hidden; -webkit-font-smoothing:antialiased;
+  }
+  .app{ width:100%; height:100dvh; display:flex; flex-direction:column; position:relative; }
+
+  h1,h2,.brand,.timer{ font-family:'Space Grotesk',system-ui,sans-serif; }
+
+  .topbar{
+    flex-shrink:0; display:flex; align-items:center; justify-content:space-between;
+    padding: max(env(safe-area-inset-top,0px),16px) 20px 14px;
+  }
+  .brand{ display:flex; align-items:center; gap:9px; font-weight:700; font-size:15px; letter-spacing:.2px; }
+  .brand-dot{ width:9px; height:9px; border-radius:50%; background:var(--mint); box-shadow:0 0 0 4px var(--ring); }
+
+  .screen{ flex:1; min-height:0; overflow-y:auto; display:flex; flex-direction:column; }
+  .screen-pad{ padding:8px 20px 36px; max-width:480px; margin:0 auto; width:100%; }
+
+  .hero{ margin-top:4vh; margin-bottom:26px; }
+  .hero h1{ font-size:clamp(26px,7vw,34px); font-weight:700; line-height:1.18; letter-spacing:-.3px; }
+  .hero p{ color:var(--text2); font-size:14.5px; line-height:1.6; margin-top:10px; max-width:38ch; }
+
+  .link-banner{
+    display:flex; gap:10px; align-items:flex-start; background: color-mix(in srgb, var(--mint) 12%, var(--surface));
+    border:1px solid color-mix(in srgb, var(--mint) 45%, var(--border)); border-radius:13px;
+    padding:12px 14px; margin-bottom:20px; font-size:12.5px; line-height:1.55; color:var(--text);
+  }
+  .link-banner svg{ width:16px; height:16px; flex-shrink:0; margin-top:1px; color:var(--mint); }
+
+  .mode-row{ display:flex; gap:8px; margin-bottom:22px; }
+  .mode-btn{
+    flex:1; display:flex; flex-direction:column; align-items:center; gap:6px;
+    padding:14px 8px; border-radius:14px; border:1.5px solid var(--border);
+    background:var(--surface); color:var(--text2); cursor:pointer; font-family:inherit;
+    transition:all .15s;
+  }
+  .mode-btn svg{ width:20px; height:20px; }
+  .mode-btn.on{ border-color:var(--mint); background:color-mix(in srgb, var(--mint) 10%, var(--surface)); color:var(--mint); }
+  .mode-btn span{ font-size:12.5px; font-weight:600; }
+
+  .action-card{
+    background:var(--surface); border:1.5px solid var(--border); border-radius:18px;
+    padding:20px; margin-bottom:14px;
+  }
+  .action-card h2{ font-size:16px; font-weight:600; margin-bottom:4px; }
+  .action-card p{ color:var(--text3); font-size:13px; line-height:1.55; margin-bottom:14px; }
+
+  .btn{
+    display:flex; align-items:center; justify-content:center; gap:9px;
+    width:100%; padding:14px 18px; border-radius:13px; border:none;
+    font-family:inherit; font-weight:600; font-size:14.5px; cursor:pointer;
+    transition:transform .1s, filter .15s;
+  }
+  .btn svg{ width:16px; height:16px; flex-shrink:0; }
+  .btn:active{ transform:scale(.98); }
+  .btn-primary{ background:var(--mint); color:#04211a; }
+  .btn-primary:hover{ filter:brightness(1.08); }
+  .btn-outline{ background:transparent; border:1.5px solid var(--border); color:var(--text); }
+  .btn-outline:hover{ border-color:var(--text3); }
+  .btn:disabled{ opacity:.5; cursor:not-allowed; }
+  .btn-row{ display:flex; gap:8px; }
+  .btn-row .btn{ flex:1; }
+  .btn-sm{ padding:10px 14px; font-size:13px; }
+
+  textarea.codebox{
+    width:100%; min-height:46px; resize:vertical; padding:11px 12px;
+    background:var(--surface2); border:1.5px solid var(--border); border-radius:11px;
+    color:var(--text2); font-family:'Space Grotesk',monospace; font-size:10.5px; line-height:1.5;
+    outline:none; word-break:break-all;
+  }
+  textarea.codebox:focus{ border-color:var(--mint); color:var(--text); }
+  .field-label{ font-size:11.5px; font-weight:700; color:var(--text3); margin-bottom:7px; display:flex; align-items:center; justify-content:space-between; gap:8px; }
+  .link-row-btns{ display:flex; gap:4px; }
+  .icon-btn{
+    display:flex; align-items:center; gap:5px; background:none; border:none; color:var(--mint);
+    font-family:inherit; font-size:11.5px; font-weight:700; cursor:pointer; padding:4px 6px; border-radius:7px;
+  }
+  .icon-btn:hover{ background: color-mix(in srgb, var(--mint) 12%, transparent); }
+  .icon-btn svg{ width:12px; height:12px; }
+  .icon-btn.muted{ color:var(--text3); }
+
+  .step-num{
+    width:22px; height:22px; border-radius:7px; background:var(--surface2); border:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:var(--text2);
+    flex-shrink:0;
+  }
+  .step-row{ display:flex; gap:10px; align-items:flex-start; margin-bottom:16px; }
+  .step-row:last-child{ margin-bottom:0; }
+  .step-body{ flex:1; min-width:0; }
+  .step-title{ font-size:13px; font-weight:600; margin-bottom:9px; color:var(--text2); }
+
+  .status-line{ display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--text3); margin-top:10px; }
+  .status-dot{ width:7px; height:7px; border-radius:50%; background:var(--text3); flex-shrink:0; }
+  .status-dot.busy{ background:var(--amber); animation:pulseDot 1.1s ease-in-out infinite; }
+  .status-dot.ok{ background:var(--mint); }
+  @keyframes pulseDot{ 0%,100%{opacity:1} 50%{opacity:.35} }
+
+  .qr-wrap{ display:flex; justify-content:center; padding:14px; background:#fff; border-radius:12px; margin-top:10px; }
+  .qr-wrap.hidden{ display:none; }
+
+  .error-box{
+    background: color-mix(in srgb, var(--coral) 12%, var(--surface));
+    border:1px solid color-mix(in srgb, var(--coral) 40%, var(--border));
+    color: var(--coral); border-radius:11px; padding:11px 13px; font-size:12.5px; line-height:1.55; margin-top:12px;
+  }
+
+  .toast{
+    position:fixed; left:50%; bottom:26px; transform:translateX(-50%) translateY(12px);
+    background:var(--surface2); border:1px solid var(--border); color:var(--text);
+    padding:11px 18px; border-radius:99px; font-size:12.5px; font-weight:600;
+    box-shadow:0 10px 30px rgba(0,0,0,.35); opacity:0; pointer-events:none; transition:all .22s ease;
+    z-index:50; white-space:nowrap; max-width:90vw; overflow:hidden; text-overflow:ellipsis;
+  }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+  /* ── call screen ─────────────────────────────────────── */
+  .callscreen{ flex:1; min-height:0; position:relative; display:flex; flex-direction:column; background:#05080c; }
+  video{ background:#000; }
+  .remote-video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .local-video-wrap{
+    position:absolute; top:16px; right:16px; width:92px; height:126px; border-radius:14px;
+    overflow:hidden; border:2px solid rgba(255,255,255,.18); box-shadow:0 6px 18px rgba(0,0,0,.4);
+    background:#111; z-index:5;
+  }
+  .local-video{ width:100%; height:100%; object-fit:cover; transform:scaleX(-1); }
+
+  .center-stage{
+    flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    position:relative; z-index:2; padding:20px;
+  }
+  .avatar-ring{ position:relative; width:132px; height:132px; display:flex; align-items:center; justify-content:center; margin-bottom:22px; }
+  .avatar-ring::before, .avatar-ring::after{
+    content:''; position:absolute; inset:0; border-radius:50%;
+    border:1.5px solid var(--mint); opacity:0; animation:ringPulse 2.2s ease-out infinite;
+  }
+  .avatar-ring::after{ animation-delay:1.1s; }
+  @keyframes ringPulse{ 0%{ transform:scale(.85); opacity:.7;} 100%{ transform:scale(1.55); opacity:0;} }
+  .avatar-ring.connected::before, .avatar-ring.connected::after{ animation:none; opacity:0; }
+  .avatar-circle{
+    width:104px; height:104px; border-radius:50%;
+    background:linear-gradient(150deg, var(--mint-dim), #0d2a22);
+    display:flex; align-items:center; justify-content:center; font-size:36px; font-weight:700;
+    color:#eafff6; box-shadow:0 8px 26px rgba(0,0,0,.4); position:relative; z-index:2;
+  }
+  .call-title{ font-size:19px; font-weight:600; color:#f2f6f5; margin-bottom:6px; text-align:center; }
+  .call-sub{ font-size:13px; color:#9fb0ba; text-align:center; max-width:32ch; }
+  .timer{ font-size:14px; color:#cfe9df; margin-top:8px; letter-spacing:.4px; }
+
+  .call-toolbar{
+    position:relative; z-index:5; display:flex; align-items:center; justify-content:center; gap:14px;
+    padding: 20px 20px max(env(safe-area-inset-bottom,0px) + 20px, 28px);
+  }
+  .tool-btn{
+    width:54px; height:54px; border-radius:50%; border:none; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(255,255,255,.12); color:#fff; backdrop-filter:blur(6px);
+    transition:transform .1s, background .15s;
+  }
+  .tool-btn:active{ transform:scale(.92); }
+  .tool-btn.active{ background:#fff; color:#0a0e13; }
+  .tool-btn.end{ background:var(--coral); width:64px; height:64px; }
+  .tool-btn svg{ width:22px; height:22px; }
+
+  .hidden{ display:none !important; }
+  ::-webkit-scrollbar{ width:0; height:0; }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+  <!-- ═══════ HOME / SETUP ═══════ -->
+  <div class="topbar" id="topbar">
+    <div class="brand"><span class="brand-dot"></span>Relay</div>
+  </div>
+
+  <div class="screen" id="homeScreen">
+    <div class="screen-pad">
+      <div class="hero" id="hero">
+        <h1>Call, browser to browser.</h1>
+        <p>No account, no server storing your call. Start a call to get a link, or open a link someone sent you.</p>
+      </div>
+
+      <div id="joinBanner" class="link-banner hidden">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <div>You opened a call link. Tap <strong>Answer this call</strong> below to connect.</div>
+      </div>
+
+      <div class="mode-row" id="modeRow">
+        <button class="mode-btn on" id="modeVideoBtn" onclick="setMode('video')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+          <span>Video</span>
+        </button>
+        <button class="mode-btn" id="modeAudioBtn" onclick="setMode('audio')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          <span>Audio</span>
+        </button>
+      </div>
+
+      <!-- Card 1: start -->
+      <div class="action-card" id="startCard">
+        <h2>Start a call</h2>
+        <p>You'll get a link. Send it to the other person any way you like — chat, SMS, email — or let them scan the QR code.</p>
+        <button class="btn btn-primary" id="startCallBtn" onclick="startCall()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          Start call
+        </button>
+
+        <div id="callerFlow" class="hidden" style="margin-top:16px">
+          <div class="step-row">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <div class="field-label">
+                <span>Send this call link</span>
+                <div class="link-row-btns">
+                  <button class="icon-btn" id="shareOfferBtn" onclick="shareOrCopy('offer')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.9 4M15.4 6.5l-6.9 4"/></svg>
+                    Share
+                  </button>
+                  <button class="icon-btn muted" onclick="toggleQR('offer')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3zM18 18h3v3h-3zM14 21h3M21 14v3"/></svg>
+                    QR
+                  </button>
+                </div>
+              </div>
+              <textarea class="codebox" id="offerCode" readonly onclick="this.select()"></textarea>
+              <div class="qr-wrap hidden" id="offerQR"></div>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <div class="step-title">When they reply, get their answer back to you:</div>
+              <div class="btn-row">
+                <button class="btn btn-primary btn-sm" onclick="pasteInto('answerInput', true)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/></svg>
+                  Paste their reply
+                </button>
+              </div>
+              <textarea class="codebox hidden" id="answerInput" placeholder="…or paste manually" oninput="onAnswerInput()" style="margin-top:8px"></textarea>
+              <button class="btn btn-outline btn-sm hidden" id="connectBtn" style="margin-top:8px" onclick="completeCall()" disabled>Connect</button>
+            </div>
+          </div>
+          <div class="status-line" id="callerStatus"><span class="status-dot busy"></span><span>Waiting for their reply…</span></div>
+        </div>
+      </div>
+
+      <!-- Card 2: join -->
+      <div class="action-card" id="joinCard">
+        <h2>Answer a call</h2>
+        <p>Got a call link from someone? Paste it here, or it's already filled in if you opened it directly.</p>
+        <textarea class="codebox" id="offerInput" placeholder="Paste the call link here…" oninput="onOfferInput()"></textarea>
+        <div class="btn-row" style="margin-top:10px">
+          <button class="btn btn-outline btn-sm" onclick="pasteInto('offerInput', false)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/></svg>
+            Paste
+          </button>
+          <button class="btn btn-primary btn-sm" id="joinBtn" onclick="joinCall()" disabled>Answer this call</button>
+        </div>
+
+        <div id="calleeFlow" class="hidden" style="margin-top:16px">
+          <div class="field-label">
+            <span>Send this reply back</span>
+            <div class="link-row-btns">
+              <button class="icon-btn" id="shareAnswerBtn" onclick="shareOrCopy('answer')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.9 4M15.4 6.5l-6.9 4"/></svg>
+                Share
+              </button>
+              <button class="icon-btn muted" onclick="toggleQR('answer')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3zM18 18h3v3h-3zM14 21h3M21 14v3"/></svg>
+                QR
+              </button>
+            </div>
+          </div>
+          <textarea class="codebox" id="answerCode" readonly onclick="this.select()"></textarea>
+          <div class="qr-wrap hidden" id="answerQR"></div>
+          <div class="status-line"><span class="status-dot busy"></span><span>Waiting for them to connect…</span></div>
+        </div>
+      </div>
+
+      <div id="errorBox"></div>
+    </div>
+  </div>
+
+  <!-- ═══════ CALL SCREEN ═══════ -->
+  <div class="callscreen hidden" id="callScreen">
+    <video class="remote-video hidden" id="remoteVideo" autoplay playsinline></video>
+    <div class="local-video-wrap hidden" id="localVideoWrap">
+      <video class="local-video" id="localVideo" autoplay playsinline muted></video>
+    </div>
+
+    <div class="center-stage" id="centerStage">
+      <div class="avatar-ring" id="avatarRing">
+        <div class="avatar-circle">☺</div>
+      </div>
+      <div class="call-title" id="callTitle">Connecting…</div>
+      <div class="call-sub" id="callSub">Setting up a secure connection</div>
+      <div class="timer hidden" id="callTimer">00:00</div>
+    </div>
+
+    <div class="call-toolbar">
+      <button class="tool-btn" id="muteBtn" onclick="toggleMute()" title="Mute">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8"/></svg>
+      </button>
+      <button class="tool-btn" id="camBtn" onclick="toggleCam()" title="Camera">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+      </button>
+      <button class="tool-btn end" onclick="endCall()" title="End call">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="transform:rotate(135deg)"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  // ── state ──────────────────────────────────────────────
+  let mode = 'video';           // 'video' | 'audio'
+  let role = null;              // 'caller' | 'callee'
+  let pc = null;
+  let localStream = null;
+  let micOn = true, camOn = true;
+  let timerInterval = null, callSeconds = 0;
+  const ICE_SERVERS = [
+    { urls: 'stun:stun.l.google.com:19302' },
+    { urls: 'stun:global.stun.twilio.com:3478' },
+  ];
+
+  const $ = id => document.getElementById(id);
+
+  window.setMode = function(m){
+    mode = m;
+    $('modeVideoBtn').classList.toggle('on', m === 'video');
+    $('modeAudioBtn').classList.toggle('on', m === 'audio');
+  };
+
+  function showError(msg){ $('errorBox').innerHTML = '<div class="error-box">' + msg + '</div>'; }
+  function clearError(){ $('errorBox').innerHTML = ''; }
+
+  let toastTimer = null;
+  function showToast(msg){
+    const t = $('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+  }
+
+  // ── base64url-safe encode/decode for SDP payloads ───────
+  function encode(obj){
+    return btoa(unescape(encodeURIComponent(JSON.stringify(obj))))
+      .replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  }
+  function decode(str){
+    let s = str.trim().replace(/-/g,'+').replace(/_/g,'/');
+    while (s.length % 4) s += '=';
+    return JSON.parse(decodeURIComponent(escape(atob(s))));
+  }
+
+  /** Accepts a raw code OR a full shared link and returns just the code. */
+  function extractCode(raw){
+    let s = (raw || '').trim();
+    const hashIdx = s.indexOf('#');
+    if (hashIdx !== -1) s = s.slice(hashIdx + 1);
+    const eq = s.indexOf('=');
+    if (eq !== -1 && /^[oa]$/.test(s.slice(0, eq))) s = s.slice(eq + 1);
+    return s.trim();
+  }
+
+  function pageBaseUrl(){ return location.origin + location.pathname; }
+  function buildLink(kind, code){ return pageBaseUrl() + '#' + kind + '=' + code; }
+
+  async function copyRaw(text){
+    try{ await navigator.clipboard.writeText(text); return true; }
+    catch(e){ return false; }
+  }
+
+  window.shareOrCopy = async function(kind){
+    const code = kind === 'offer' ? $('offerCode').value : $('answerCode').value;
+    if (!code) return;
+    const link = buildLink(kind === 'offer' ? 'o' : 'a', code);
+    if (navigator.share){
+      try{
+        await navigator.share({ title: 'Relay call', text: kind === 'offer' ? 'Join my call:' : 'Here is my reply to connect:', url: link });
+      }catch(e){ /* user cancelled the share sheet — not an error */ }
+    } else {
+      const ok = await copyRaw(link);
+      showToast(ok ? 'Link copied — send it to them' : 'Could not copy automatically — select the text below');
+    }
+  };
+
+  window.toggleQR = function(kind){
+    const box = kind === 'offer' ? $('offerQR') : $('answerQR');
+    const code = kind === 'offer' ? $('offerCode').value : $('answerCode').value;
+    if (!code) return;
+    const isHidden = box.classList.contains('hidden');
+    if (isHidden){
+      if (!box.dataset.rendered){
+        box.innerHTML = '';
+        if (typeof QRCode !== 'undefined'){
+          new QRCode(box, { text: buildLink(kind === 'offer' ? 'o' : 'a', code), width: 168, height: 168, correctLevel: QRCode.CorrectLevel.L });
+          box.dataset.rendered = '1';
+        } else {
+          box.innerHTML = '<div style="color:#333;font-size:12px;padding:8px">QR code unavailable right now.</div>';
+        }
+      }
+      box.classList.remove('hidden');
+    } else {
+      box.classList.add('hidden');
+    }
+  };
+
+  window.pasteInto = async function(id, autoRun){
+    try{
+      const text = await navigator.clipboard.readText();
+      const code = extractCode(text);
+      if (!code){ showToast('Clipboard is empty'); return; }
+      $(id).value = code;
+      $(id).classList.remove('hidden');
+      if (id === 'answerInput'){
+        onAnswerInput();
+        $('connectBtn').classList.remove('hidden');
+        if (autoRun && !$('connectBtn').disabled) completeCall();
+      } else {
+        onOfferInput();
+        if (autoRun && !$('joinBtn').disabled) joinCall();
+      }
+    }catch(e){
+      showToast('Could not read clipboard — long-press the box below and paste manually');
+      if (id === 'answerInput') $(id).classList.remove('hidden');
+    }
+  };
+
+  async function getMedia(){
+    const constraints = { audio: true, video: mode === 'video' ? { width:{ideal:640}, height:{ideal:480} } : false };
+    try{
+      return await navigator.mediaDevices.getUserMedia(constraints);
+    }catch(err){
+      if (mode === 'video'){
+        try{
+          const stream = await navigator.mediaDevices.getUserMedia({ audio:true, video:false });
+          mode = 'audio'; setMode('audio');
+          return stream;
+        }catch(err2){ throw err2; }
+      }
+      throw err;
+    }
+  }
+
+  function waitIceComplete(peer){
+    return new Promise(resolve => {
+      if (peer.iceGatheringState === 'complete') return resolve();
+      function check(){
+        if (peer.iceGatheringState === 'complete'){
+          peer.removeEventListener('icegatheringstatechange', check);
+          resolve();
+        }
+      }
+      peer.addEventListener('icegatheringstatechange', check);
+      setTimeout(resolve, 4000);
+    });
+  }
+
+  function buildPeerConnection(){
+    const p = new RTCPeerConnection({ iceServers: ICE_SERVERS });
+    p.ontrack = e => {
+      const remote = $('remoteVideo');
+      if (remote.srcObject !== e.streams[0]) remote.srcObject = e.streams[0];
+      if (mode === 'video') remote.classList.remove('hidden');
+    };
+    p.onconnectionstatechange = () => {
+      if (p.connectionState === 'connected') onConnected();
+      else if (['failed','disconnected','closed'].includes(p.connectionState)) onDisconnected(p.connectionState);
+    };
+    return p;
+  }
+
+  function mediaErrorMessage(err){
+    if (err && (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError')){
+      return 'Camera/microphone access was denied. Allow access in this browser\u2019s site settings, then try again.';
+    }
+    if (err && err.name === 'NotFoundError'){
+      return 'No camera or microphone was found on this device.';
+    }
+    return 'Could not start the call. ' + (err && err.message ? err.message : 'Please try again.');
+  }
+
+  // ── caller flow ──────────────────────────────────────────
+  window.startCall = async function(){
+    clearError();
+    role = 'caller';
+    $('startCallBtn').disabled = true;
+    try{
+      localStream = await getMedia();
+      pc = buildPeerConnection();
+      localStream.getTracks().forEach(t => pc.addTrack(t, localStream));
+
+      const offer = await pc.createOffer();
+      await pc.setLocalDescription(offer);
+      await waitIceComplete(pc);
+
+      const code = encode({ type: pc.localDescription.type, sdp: pc.localDescription.sdp, mode });
+      $('offerCode').value = buildLink('o', code);
+      $('callerFlow').classList.remove('hidden');
+      $('startCard').querySelector('p').classList.add('hidden');
+      $('startCallBtn').classList.add('hidden');
+      $('modeRow').classList.add('hidden');
+
+      const copied = await copyRaw(buildLink('o', code));
+      showToast(copied ? 'Call link copied — send it to them' : 'Tap Share to send your call link');
+    }catch(err){
+      $('startCallBtn').disabled = false;
+      showError(mediaErrorMessage(err));
+    }
+  };
+
+  window.onAnswerInput = function(){
+    $('connectBtn').disabled = extractCode($('answerInput').value).length < 10;
+  };
+
+  window.completeCall = async function(){
+    clearError();
+    try{
+      const data = decode(extractCode($('answerInput').value));
+      await pc.setRemoteDescription(new RTCSessionDescription({ type: data.type, sdp: data.sdp }));
+      $('callerStatus').innerHTML = '<span class="status-dot busy"></span><span>Connecting…</span>';
+      enterCallScreen();
+    }catch(err){
+      showError('That reply looks invalid or incomplete. Ask them to resend the whole link, then paste again.');
+    }
+  };
+
+  // ── callee flow ──────────────────────────────────────────
+  window.onOfferInput = function(){
+    $('joinBtn').disabled = extractCode($('offerInput').value).length < 10;
+  };
+
+  window.joinCall = async function(){
+    clearError();
+    role = 'callee';
+    $('joinBtn').disabled = true;
+    try{
+      const data = decode(extractCode($('offerInput').value));
+      mode = data.mode || 'video';
+      setMode(mode);
+
+      localStream = await getMedia();
+      pc = buildPeerConnection();
+      localStream.getTracks().forEach(t => pc.addTrack(t, localStream));
+
+      await pc.setRemoteDescription(new RTCSessionDescription({ type: data.type, sdp: data.sdp }));
+      const answer = await pc.createAnswer();
+      await pc.setLocalDescription(answer);
+      await waitIceComplete(pc);
+
+      const code = encode({ type: pc.localDescription.type, sdp: pc.localDescription.sdp });
+      $('answerCode').value = buildLink('a', code);
+      $('calleeFlow').classList.remove('hidden');
+      enterCallScreen();
+
+      const copied = await copyRaw(buildLink('a', code));
+      showToast(copied ? 'Your reply link is copied — send it back to them' : 'Tap Share to send your reply');
+    }catch(err){
+      $('joinBtn').disabled = false;
+      showError(err && err.message && err.message.indexOf('JSON') !== -1
+        ? 'That call link looks invalid or incomplete. Ask them to resend it, then paste again.'
+        : mediaErrorMessage(err));
+    }
+  };
+
+  // ── call screen ──────────────────────────────────────────
+  function enterCallScreen(){
+    $('homeScreen').classList.add('hidden');
+    $('topbar').classList.add('hidden');
+    $('callScreen').classList.remove('hidden');
+
+    if (mode === 'video' && localStream && localStream.getVideoTracks().length){
+      $('localVideo').srcObject = localStream;
+      $('localVideoWrap').classList.remove('hidden');
+    } else {
+      $('camBtn').classList.add('hidden');
+    }
+
+    $('callTitle').textContent = 'Connecting…';
+    $('callSub').textContent = role === 'caller' ? 'Waiting for the other side to join' : 'Finishing the handshake';
+  }
+
+  function onConnected(){
+    $('avatarRing').classList.add('connected');
+    $('callTitle').textContent = mode === 'video' ? 'Video call' : 'Voice call';
+    $('callSub').textContent = 'Connected — direct between devices';
+    if (mode === 'video') $('centerStage').style.opacity = '0';
+    $('callTimer').classList.remove('hidden');
+    if (!timerInterval){
+      timerInterval = setInterval(() => {
+        callSeconds++;
+        const m = String(Math.floor(callSeconds/60)).padStart(2,'0');
+        const s = String(callSeconds%60).padStart(2,'0');
+        $('callTimer').textContent = m + ':' + s;
+      }, 1000);
+    }
+  }
+
+  function onDisconnected(state){
+    if (state === 'closed') return;
+    $('callTitle').textContent = 'Call ended';
+    $('callSub').textContent = state === 'failed'
+      ? 'The connection could not be established — this can happen across strict networks (corporate Wi-Fi, some mobile carriers).'
+      : 'The other side disconnected.';
+    $('avatarRing').classList.remove('connected');
+    $('centerStage').style.opacity = '1';
+    clearInterval(timerInterval); timerInterval = null;
+    setTimeout(resetToHome, 2600);
+  }
+
+  window.toggleMute = function(){
+    if (!localStream) return;
+    micOn = !micOn;
+    localStream.getAudioTracks().forEach(t => t.enabled = micOn);
+    $('muteBtn').classList.toggle('active', !micOn);
+  };
+
+  window.toggleCam = function(){
+    if (!localStream) return;
+    camOn = !camOn;
+    localStream.getVideoTracks().forEach(t => t.enabled = camOn);
+    $('camBtn').classList.toggle('active', !camOn);
+  };
+
+  window.endCall = function(){
+    if (pc){ pc.close(); pc = null; }
+    if (localStream){ localStream.getTracks().forEach(t => t.stop()); localStream = null; }
+    clearInterval(timerInterval); timerInterval = null; callSeconds = 0;
+    resetToHome();
+  };
+
+  function resetToHome(){
+    $('callScreen').classList.add('hidden');
+    $('topbar').classList.remove('hidden');
+    $('homeScreen').classList.remove('hidden');
+    $('centerStage').style.opacity = '1';
+    $('avatarRing').classList.remove('connected');
+    $('callTimer').classList.add('hidden');
+    $('callTimer').textContent = '00:00';
+    $('localVideoWrap').classList.add('hidden');
+    $('remoteVideo').classList.add('hidden');
+    $('camBtn').classList.remove('hidden');
+    $('muteBtn').classList.remove('active');
+    $('camBtn').classList.remove('active');
+    $('modeRow').classList.remove('hidden');
+    $('startCard').querySelector('p').classList.remove('hidden');
+    $('startCallBtn').disabled = false;
+    $('startCallBtn').classList.remove('hidden');
+    $('callerFlow').classList.add('hidden');
+    $('calleeFlow').classList.add('hidden');
+    $('offerCode').value = ''; $('answerInput').value = ''; $('answerCode').value = ''; $('offerInput').value = '';
+    $('answerInput').classList.add('hidden'); $('connectBtn').classList.add('hidden');
+    $('offerQR').classList.add('hidden'); $('offerQR').dataset.rendered = '';
+    $('answerQR').classList.add('hidden'); $('answerQR').dataset.rendered = '';
+    $('connectBtn').disabled = true; $('joinBtn').disabled = true;
+    $('joinBanner').classList.add('hidden');
+    role = null;
+    clearError();
+  }
+
+  // ── open-a-link handoff: pre-fill the Join card when arriving via #o= ──
+  function handleIncomingHash(){
+    const raw = location.hash;
+    if (!raw || raw.length < 4) return;
+    const code = extractCode(raw);
+    if (!code) return;
+    try{
+      decode(code); // validate before touching the UI
+      $('offerInput').value = code;
+      onOfferInput();
+      $('joinBanner').classList.remove('hidden');
+      $('joinCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      history.replaceState(null, '', pageBaseUrl());
+    }catch(e){ /* not a call link — ignore */ }
+  }
+
+  window.addEventListener('beforeunload', () => {
+    if (pc) pc.close();
+    if (localStream) localStream.getTracks().forEach(t => t.stop());
+  });
+
+  handleIncomingHash();
+})();
+</script>
+</body>
+</html>
