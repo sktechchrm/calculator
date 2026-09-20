@@ -3,7 +3,7 @@ import {
   FaCalculator, FaUniversity, FaBirthdayCake, FaWeight,
   FaFire, FaReceipt, FaChartLine, FaTshirt, FaRuler,
   FaExchangeAlt, FaRulerCombined, FaMapMarkedAlt,
-  FaBalanceScale, FaQuestionCircle, FaPiggyBank, FaMosque, FaGavel, FaFileInvoiceDollar, FaBolt, FaBaby, FaFileContract, FaVideo,
+  FaBalanceScale, FaQuestionCircle, FaPiggyBank, FaMosque, FaGavel, FaFileInvoiceDollar, FaBolt, FaBaby, FaFileContract, FaVideo, FaAppleAlt,
 } from 'react-icons/fa';
 
 import { LangProvider, useLang } from './context/LangContext.tsx';
@@ -37,6 +37,7 @@ import IncomeTaxCalc   from './components/calculators/Incometaxcalc.tsx';
 import UtilityCalc     from './components/calculators/Utilitycalc.tsx';
 import MaternityCalc  from './components/calculators/MaternityCalc.tsx';
 import FinalSettlementCalc from './components/calculators/FinalSettlementCalc.tsx';
+import DietChartCalc  from './components/calculators/Dietchartcalc.tsx';
 
 const SCREENS: Record<string, React.ComponentType<any>> = {
   general:  GeneralCalc,
@@ -59,6 +60,7 @@ const SCREENS: Record<string, React.ComponentType<any>> = {
   utility:  UtilityCalc,
   maternity: MaternityCalc,
   finalsettlement: FinalSettlementCalc,
+  dietchart: DietChartCalc,
   // 'call' is NOT registered here — it doesn't take CalcProps (no
   // history/onAdd/onClear), so it's special-cased in AppInner below,
   // the same way 'support' is.
@@ -68,7 +70,7 @@ const ICONS: Record<string, React.ComponentType<{ size?: number; color?: string 
   FaCalculator, FaUniversity, FaBirthdayCake, FaWeight,
   FaFire, FaReceipt, FaChartLine, FaTshirt, FaRuler,
   FaExchangeAlt, FaRulerCombined, FaMapMarkedAlt, FaBalanceScale,
-  FaPiggyBank, FaMosque, FaGavel, FaFileInvoiceDollar, FaBolt, FaBaby, FaFileContract, FaVideo,
+  FaPiggyBank, FaMosque, FaGavel, FaFileInvoiceDollar, FaBolt, FaBaby, FaFileContract, FaVideo, FaAppleAlt,
 };
 
 const APP_LABELS: Record<string, { en: string; bn: string }> = {
@@ -93,6 +95,7 @@ const APP_LABELS: Record<string, { en: string; bn: string }> = {
   maternity: { en: 'Maternity Benefit', bn: 'মাতৃত্ব সুবিধা' },
   finalsettlement: { en: 'Final Settlement', bn: 'চূড়ান্ত পাওনা' },
   call:     { en: 'Video Call',   bn: 'ভিডিও কল' },
+  dietchart:{ en: 'Diet Chart',   bn: 'ডায়েট চার্ট' },
   support:  { en: 'Support',      bn: 'সাপোর্ট' },
 };
 
@@ -170,6 +173,8 @@ Enter value, select unit, press Convert.`,
                bn: 'যোগদান ও সর্বশেষ উপস্থিতির তারিখ দিন এবং নিষ্পত্তির ধরন বেছে নিন।\nমাসিক মজুরি, অর্জিত ছুটি এবং প্রযোজ্য নোটিশ/লে-অফের দিন দিন।\nহিসাব চাপুন — মোট প্রাপ্য, কর্তন ও নিট প্রদেয়ের সম্পূর্ণ বিবরণ দেখুন।' },
   call:     { en: 'Tap Start call to get a link, and send it to the other person any way you like.\nOr open a link someone sent you to answer.\nWorks browser to browser — no account needed.',
                bn: 'কল শুরু করুন চাপুন, একটি লিংক পাবেন — যেকোনো মাধ্যমে অন্য ব্যক্তিকে পাঠান।\nঅথবা কেউ পাঠানো লিংক খুলে উত্তর দিন।\nব্রাউজার টু ব্রাউজার কাজ করে — কোনো অ্যাকাউন্ট প্রয়োজন নেই।' },
+  dietchart: { en: 'Enter gender, age, weight, height, activity level and goal.\nChoose meals per day and diet preference.\nPress Calculate to see your calorie target, macros, and a meal-wise chart with food ideas.',
+               bn: 'লিঙ্গ, বয়স, ওজন, উচ্চতা, কার্যকলাপ স্তর ও লক্ষ্য দিন।\nদৈনিক খাবারের সংখ্যা ও খাদ্যাভ্যাস বেছে নিন।\nহিসাব চাপুন — ক্যালরি লক্ষ্য, ম্যাক্রো ও বেলাভিত্তিক চার্ট এবং খাবার পরামর্শ দেখুন।' },
   support:  { en: '', bn: '' },
 };
 

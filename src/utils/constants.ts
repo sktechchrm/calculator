@@ -11,7 +11,7 @@ export interface CalcProps {
 
 // Dark, rich, professional colors — no blue/sky
 export const APPS: AppDef[] = [
-  { id: 'general',   icon: 'FaCalculator',    color: '#e8e8e8', light: '#1e1e22', shadow: '#e8e8e820' },
+  { id: 'general',   icon: 'FaCalculator',    color: '#190aee', light: '#1e1e22', shadow: '#e8e8e820' },
   { id: 'emi',       icon: 'FaUniversity',    color: '#d4a017', light: '#1e1a0e', shadow: '#d4a01720' },
   { id: 'deposit',   icon: 'FaLandmark',      color: '#0e9594', light: '#071616', shadow: '#0e959420' },
   { id: 'vat',       icon: 'FaReceipt',       color: '#9b59b6', light: '#160e1a', shadow: '#9b59b620' },
@@ -28,8 +28,9 @@ export const APPS: AppDef[] = [
   { id: 'utility',   icon: 'FaBolt',           color: '#f1c40f', light: '#1c1a08', shadow: '#f1c40f20' },
   { id: 'age',       icon: 'FaBirthdayCake',  color: '#c41e3a', light: '#1e0a0f', shadow: '#c41e3a20' },
   { id: 'bmi',       icon: 'FaWeight',        color: '#e67e22', light: '#1e1108', shadow: '#e67e2220' },
-  { id: 'calorie',   icon: 'FaFire',          color: '#e74c3c', light: '#1e0808', shadow: '#e74c3c20' },
+  //{ id: 'calorie',   icon: 'FaFire',          color: '#e74c3c', light: '#1e0808', shadow: '#e74c3c20' },
   { id: 'maternity', icon: 'FaBaby',          color: '#ec4899', light: '#1e0814', shadow: '#ec489920' },
   { id: 'finalsettlement', icon: 'FaFileContract', color: '#0d9488', light: '#071615', shadow: '#0d948820' },
-  // { id: 'call',      icon: 'FaVideo',         color: '#06b6d4', light: '#04181c', shadow: '#06b6d420' },
+  //{ id: 'call',      icon: 'FaVideo',         color: '#06b6d4', light: '#04181c', shadow: '#06b6d420' },
+  { id: 'dietchart', icon: 'FaAppleAlt',      color: '#65a30d', light: '#0e1608', shadow: '#65a30d20' },
 ];

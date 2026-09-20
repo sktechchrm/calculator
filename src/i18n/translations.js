@@ -44,6 +44,7 @@ export const translations = {
       maternity:{ label: 'মাতৃত্ব সুবিধা',  desc: 'শ্রম আইন অনুযায়ী হিসাব' },
       finalsettlement: { label: 'চূড়ান্ত পাওনা',  desc: 'নিষ্পত্তি ও ক্ষতিপূরণ' },
       call:     { label: 'ভিডিও কল',    desc: 'ব্রাউজার টু ব্রাউজার' },
+      dietchart:{ label: 'ডায়েট চার্ট', desc: 'ক্যালরি ও খাবার পরিকল্পনা' },
     },
     deposit: {
       fdr: 'এফডিআর', dps: 'ডিপিএস',
@@ -262,6 +263,7 @@ export const translations = {
       maternity:{ label: 'Maternity Benefit', desc: 'Labour Law Calculation' },
       finalsettlement: { label: 'Final Settlement', desc: 'Separation & Compensation' },
       call:     { label: 'Video Call',   desc: 'Browser to browser' },
+      dietchart:{ label: 'Diet Chart',   desc: 'Calories & meal planning' },
     },
     deposit: {
       fdr: 'FDR', dps: 'DPS',
